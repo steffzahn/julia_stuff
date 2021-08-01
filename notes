@@ -1,0 +1,31 @@
+idea 1
+# i*j == k, j*k == i, k*i == j, i*i==-j, j*j==-k, k*k==-i
+#(i*x1+j*x2+k*x3)*(i*y1+j*y2+k*y3)
+# == i*i*x1*y1+i*j*(x1*y2+x2*y1)+i*k*(x1*y3+x3*y1)+j*j*x2*y2+j*k*(x2*y3+x3*y2)+k*k*x3*y3
+# == i*i*x1*y1+k*(x1*y2+x2*y1)+j*(x1*y3+x3*y1)+j*j*x2*y2+i*(x2*y3+x3*y2)+k*k*x3*y3
+# == -j*x1*y1+k*(x1*y2+x2*y1)+j*(x1*y3+x3*y1)-k*x2*y2+i*(x2*y3+x3*y2)-i*x3*y3
+# == i*(x2*y3+x3*y2-x3*y3)+j*(x1*y3+x3*y1-x1*y1)+k*(x1*y2+x2*y1-x2*y2)
+
+grows too quickly
+
+
+# i*j == -k, j*k == -i, k*i == -j
+
+i*j*j*k*k*i==(-k) * (-i) * (-j) == -i*j*k
+
+?? i*j*k == -1 (case 1)
+?? i==j==k==0.0 (case 2)
+
+(i*i)*(j*j)*(k*k) == -i*j*k
+
+_____________
+
+(x1+i*x2)*(y1+i*y2)==(x1*y1-x2*y2)+i*(x2*y1+x1*y2)
+
+_____________
+# i*j == k, j*k == i, k*i == j, i*i==-2*j, j*j==-2*k, k*k==-2*i
+#(i*x1+j*x2+k*x3)*(i*y1+j*y2+k*y3)
+# == i*i*x1*y1+i*j*(x1*y2+x2*y1)+i*k*(x1*y3+x3*y1)+j*j*x2*y2+j*k*(x2*y3+x3*y2)+k*k*x3*y3
+# == i*i*x1*y1+k*(x1*y2+x2*y1)+j*(x1*y3+x3*y1)+j*j*x2*y2+i*(x2*y3+x3*y2)+k*k*x3*y3
+# == -2*j*x1*y1+k*(x1*y2+x2*y1)+j*(x1*y3+x3*y1)-2*k*x2*y2+i*(x2*y3+x3*y2)-2*i*x3*y3
+# == i*(x2*y3+x3*y2-2*x3*y3)+j*(x1*y3+x3*y1-2*x1*y1)+k*(x1*y2+x2*y1-2*x2*y2)
