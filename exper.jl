@@ -71,12 +71,15 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
     colors=Array{RGB}(UndefInitializer(),colorsteps)
     for ii in 1:colorstepsOneColor
         scaledgray=gray*ii
-        colors[ii]=RGB(scaledgray,0.0,0.0)
-        colors[2*ii+colorstepsOneColor]=RGB(0.0,scaledgray,0.0)
-        colors[2*ii-1+colorstepsOneColor]=RGB(0.0,scaledgray,0.0)
-        colors[3*ii+3*colorstepsOneColor]=RGB(0.0,0.0,scaledgray)
-        colors[3*ii-1+3*colorstepsOneColor]=RGB(0.0,0.0,scaledgray)
-        colors[3*ii-2+3*colorstepsOneColor]=RGB(0.0,0.0,scaledgray)
+        red=RGB(scaledgray,0.0,0.0)
+        green=RGB(0.0,scaledgray,0.0)
+        blue=RGB(0.0,0.0,scaledgray)
+        colors[ii]=green
+        colors[2*ii+colorstepsOneColor]=blue
+        colors[2*ii-1+colorstepsOneColor]=blue
+        colors[3*ii+3*colorstepsOneColor]=red
+        colors[3*ii-1+3*colorstepsOneColor]=red
+        colors[3*ii-2+3*colorstepsOneColor]=red
     end
     black=RGB(0.0,0.0,0.0)
     xpos = x-radius
@@ -86,6 +89,7 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
             n=1
             c=(xpos,ypos,z,u)
             v=(0.0,0.0,0.0,0.0)
+            vold=v
             while true
                 if norm(v)>=limit
                     color=gray*convert(Float64,n)
@@ -97,7 +101,9 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
                     break
                 end
                 n += 1
-                v = v * v + c
+                vtemp = v
+                v = v * v + (n%2==1 ? -1.0 : 1.0)*vold + c
+                vold = vtemp
             end
             ypos += step
         end
