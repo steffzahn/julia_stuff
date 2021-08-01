@@ -29,3 +29,26 @@ _____________
 # == i*i*x1*y1+k*(x1*y2+x2*y1)+j*(x1*y3+x3*y1)+j*j*x2*y2+i*(x2*y3+x3*y2)+k*k*x3*y3
 # == -2*j*x1*y1+k*(x1*y2+x2*y1)+j*(x1*y3+x3*y1)-2*k*x2*y2+i*(x2*y3+x3*y2)-2*i*x3*y3
 # == i*(x2*y3+x3*y2-2*x3*y3)+j*(x1*y3+x3*y1-2*x1*y1)+k*(x1*y2+x2*y1-2*x2*y2)
+
+
+i,j,k,l
+# i*j == -k, j*k == -l, k*l == -i, l*i == -j; i*i==-l; j*j == -i , k*k== -j, l*l== -k
+# i*j*k*l==i*k
+
+#(i*x1+j*x2+k*x3+l*x4)*(i*y1+j*y2+k*y3+l*y4)
+# == i*i*x1*y1+i*j*(x1*y2+x2*y1)+i*k*(x1*y3+x3*y1)+i*l*(x1*y4+x4*y1)
+#+j*j*x2*y2+j*k*(x2*y3+x3*y2)+j*l*(x2*y4+x4*y2)
+# +k*k*x3*y3+k*l*(x3*y4+x4*y3)
+# +l*l*x4*y4
+# == -l*x1*y1-k*(x1*y2+x2*y1)+i*k*(x1*y3+x3*y1)+i*l*(x1*y4+x4*y1)
+#-i*x2*y2-l*(x2*y3+x3*y2)+j*l*(x2*y4+x4*y2)
+# -j*x3*y3-i*(x3*y4+x4*y3)
+# -k*x4*y4
+
+https://www.math.toronto.edu/mathnet/questionCorner/hypercomplex.html
+# i*i==j*j==k*k==i*j*k==-1
+#(x1+i*x2+j*x3+k*x4)*(y1+i*y2+j*y3+k*y4)
+# == x1*y1+ i*(x2*y1+x2*y1)+j*(x3*y1+x1*y3)+k*(x1*y4+x4*y1)
+#  + k*(x2*y3+x3*y2)+ j*(x2*y4+x4*y2) + i*(x3*y4+x4*y3)
+#  -x2*y2-x3*y3-x4*y4
+# == (x1*y1-x2*y2-x3*y3-x4*y4) + i*(x2*y1+x2*y1+x3*y4+x4*y3) + j*(x3*y1+x1*y3+x2*y4+x4*y2) + k*(x1*y4+x4*y1+x2*y3+x3*y2) 
