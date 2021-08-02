@@ -48,6 +48,9 @@ function -((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
            (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64})
     return (x1-y1,x2-y2,x3-y3, x4-y4)
 end
+function -((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64})
+    return (-x1,-x2,-x3,-x4)
+end
 
 function *((x1,x2,x3, x4)::Tuple{Float64, Float64, Float64, Float64}, y::Float64)
     return (x1*y,x2*y,x3*y,x4*y)
