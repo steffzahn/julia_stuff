@@ -1,3 +1,4 @@
+snap:time mydraw("xx.png",0.023, 0.009, 0.0, 0.0, 0.003, 10000.0, 8000)
 butterfly: time mydraw("xx.png",0.01, 0.0, 0.0, 0.0, 0.06, 10000.0, 8000)
    git tag butterfly   
 dark: @time mydraw("xx.png",0.435, 0.182, 0.0, 0.0, 0.03, 1000.0, 8000)

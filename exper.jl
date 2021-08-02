@@ -85,8 +85,8 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
         green=RGB(0.0,scaledgray,0.8*scaledgray)
         blue=RGB(0.4*scaledgray,0.0,scaledgray)
         colors[ii]=green
-        colors[2*ii+colorstepsOneColor]=blue
-        colors[2*ii-1+colorstepsOneColor]=blue
+        colors[3*colorstepsOneColor-2*(ii-1)]=blue
+        colors[3*colorstepsOneColor-2*(ii-1)-1]=blue
         colors[3*ii+3*colorstepsOneColor]=red
         colors[3*ii-1+3*colorstepsOneColor]=red
         colors[3*ii-2+3*colorstepsOneColor]=red
