@@ -2,6 +2,7 @@ import Base.+
 import Base.-
 import Base.*
 import Base.zero
+import Base.one
 using Images
 using ColorTypes
 
@@ -35,6 +36,9 @@ end
 function zero((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64})
     return (0.0,0.0,0.0,0.0)
 end
+function one((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64})
+    return (1.0,0.0,0.0,0.0)
+end
 function +((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
            (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64})
     return (x1+y1,x2+y2,x3+y3,x4+y4)
@@ -58,7 +62,10 @@ end
 
 function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
            (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64})
-    return (x1*y1-x2*y2-x3*y3-x4*y4,x2*y1+x2*y1+x3*y4+x4*y3,x3*y1+x1*y3+x2*y4+x4*y2,x1*y4+x4*y1+x2*y3+x3*y2)
+    return (x1*y1-x2*y2-x3*y3-x4*y4,
+            x2*y1+x1*y2+x3*y4+x4*y3,
+            x3*y1+x1*y3+x2*y4+x4*y2,
+            x1*y4+x4*y1+x2*y3+x3*y2)
 end
 
 function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
@@ -88,7 +95,7 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
         for j in 1:size
             n=1
             c=(xpos,ypos,z,u)
-            v=(0.0,0.0,0.0,0.0)
+            v=zero(c)
             vold=v
             while true
                 if norm(v)>=limit
