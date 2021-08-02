@@ -81,9 +81,9 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
     colors=Array{RGB}(UndefInitializer(),colorsteps)
     for ii in 1:colorstepsOneColor
         scaledgray=gray*ii
-        red=RGB(scaledgray,0.0,0.0)
+        red=RGB(scaledgray,0.0,0.7*scaledgray)
         green=RGB(0.0,scaledgray,0.8*scaledgray)
-        blue=RGB(0.0,0.0,scaledgray)
+        blue=RGB(0.4*scaledgray,0.0,scaledgray)
         colors[ii]=green
         colors[2*ii+colorstepsOneColor]=blue
         colors[2*ii-1+colorstepsOneColor]=blue
@@ -98,9 +98,11 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
         for j in 1:size
             n=1
             c=(xpos,ypos,z,u)
+            r=zero(c)
             v=zero(c)
+            w=zero(c)
             while true
-                if norm(v)>=limit
+                if norm(r)+norm(v)-norm(w)>=limit
                     color=gray*convert(Float64,n)
                     image[i,j] = colors[n]
                     break
@@ -110,7 +112,11 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
                     break
                 end
                 n += 1
-                v = 3.0 * v - v * v + c
+                rtemp = r
+                vtemp = v
+                r = r * w - v + c
+                v = v * rtemp + w + c
+                w = w * vtemp - rtemp + c
             end
             ypos += step
         end

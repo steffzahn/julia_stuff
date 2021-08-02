@@ -1,6 +1,9 @@
+butterfly: time mydraw("xx.png",0.01, 0.0, 0.0, 0.0, 0.06, 10000.0, 8000)
+   git tag butterfly   
 dark: @time mydraw("xx.png",0.435, 0.182, 0.0, 0.0, 0.03, 1000.0, 8000)
-
+   git tag dark
 blue5: @time mydraw("xx.png",0.2835, 0.06, 0.0, 0.0, 0.013, 1000.0, 8000)
+   git tag blue
 green4: mydraw("green4.png",-0.035, 0.0, -0.01, 0.01, 0.08, 1000.0, 5000)
    git tag green3
 green3: mydraw("green3.png",0.275, 0.05, 0.0, 0.0, 0.03, 1000.0, 5000)
