@@ -96,9 +96,9 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
             n=1
             c=(xpos,ypos,z,u)
             v=zero(c)
-            vold=v
+            w=zero(c)
             while true
-                if norm(v)>=limit
+                if norm(v)+norm(w)>=limit
                     color=gray*convert(Float64,n)
                     image[i,j] = colors[n]
                     break
@@ -109,8 +109,8 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
                 end
                 n += 1
                 vtemp = v
-                v = v * v + (n%2==1 ? -1.0 : 1.0)*vold + c
-                vold = vtemp
+                v = v * v + w + c
+                w = w * w - vtemp + c
             end
             ypos += step
         end
