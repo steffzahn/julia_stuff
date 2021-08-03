@@ -89,18 +89,18 @@ function initPalette()::Tuple{Vector{RGB},Int64}
         green=RGB(0.0,scaledgray,0.8*scaledgray)
         blue=RGB(0.4*scaledgray,0.0,scaledgray)
         colors[ii]=green
-        colors[3*colorstepsOneColor-2*(ii-1)]=blue
-        colors[3*colorstepsOneColor-2*(ii-1)-1]=blue
-        colors[3*ii+3*colorstepsOneColor]=red
-        colors[3*ii-1+3*colorstepsOneColor]=red
-        colors[3*ii-2+3*colorstepsOneColor]=red
+        colors[2*colorstepsOneColor-(ii-1)]=blue
+        colors[2*colorstepsOneColor+ii]=red
+        colors[4*colorstepsOneColor-(ii-1)]=blue
+        colors[4*colorstepsOneColor+ii]=green
+        colors[6*colorstepsOneColor-(ii-1)]=blue
     end
     return (colors,colorsteps)
 end
 
 function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                  radius::Float64,limit::Float64,size::Int64;
-                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0))
+                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0))::Matrix{RGB}
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
     (colors,colorsteps) = initPalette()
