@@ -62,6 +62,13 @@ end
 function norm((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64})
     return sqrt(x1*x1+x2*x2+x3*x3+x4*x4)
 end
+function normalize(a::Tuple{Float64, Float64, Float64, Float64})
+    n=norm(a)
+    if n==0.0
+        return a
+    end
+    return (1.0/n)*a
+end
 
 function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
            (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64})
@@ -71,8 +78,10 @@ function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
             x1*y4+x4*y1+x2*y3+x3*y2)
 end
 
-function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
-                 radius::Float64,limit::Float64,size::Int64)
+
+function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
+                 radius::Float64,limit::Float64,size::Int64;
+                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0))
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
     colorstepsOneColor=256
@@ -92,17 +101,16 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
         colors[3*ii-2+3*colorstepsOneColor]=red
     end
     black=RGB(0.0,0.0,0.0)
+    turnItNorm=normalize(turnIt)
     xpos = x-radius
     for i in 1:size
         ypos = y-radius
         for j in 1:size
             n=1
-            c=(xpos,ypos,z,u)
-            r=zero(c)
+            c=(xpos,ypos,z,u)*turnItNorm
             v=zero(c)
-            w=zero(c)
             while true
-                if norm(r)+norm(v)-norm(w)>=limit
+                if norm(v)>=limit
                     color=gray*convert(Float64,n)
                     image[i,j] = colors[n]
                     break
@@ -112,11 +120,7 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
                     break
                 end
                 n += 1
-                rtemp = r
-                vtemp = v
-                r = r * w - v + c
-                v = v * rtemp + w + c
-                w = w * vtemp - rtemp + c
+                v = 0.71 * v * v + c
             end
             ypos += step
         end
@@ -125,8 +129,10 @@ function myimage(x::Float64,y::Float64,z::Float64,u::Float64,
     return image
 end
 
-function mydraw(fn::String,x::Float64,y::Float64,z::Float64,u::Float64,
-                radius::Float64,limit::Float64,size::Int64)
-    image=myimage(x,y,z,u,radius,limit,size)
+function mydraw(fn::String,
+                a::Tuple{Float64, Float64, Float64, Float64},
+                radius::Float64,limit::Float64,size::Int64;
+                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0))
+    image=myimage(a,radius,limit,size,turnIt=turnIt)
     save(fn,image)
 end
