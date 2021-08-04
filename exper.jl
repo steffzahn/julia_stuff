@@ -51,7 +51,7 @@ function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
             x1*y4+x4*y1+x2*y3+x3*y2)
 end
 
-function initPalette()::Tuple{Vector{RGB},Int64}
+function initPalette(;colorScheme::Int64=0)::Tuple{Vector{RGB},Int64}
     colorstepsOneColor=256
     colorsteps=6*colorstepsOneColor
     gray = 1.0/convert(Float64,colorstepsOneColor)
@@ -61,22 +61,32 @@ function initPalette()::Tuple{Vector{RGB},Int64}
         red=RGB(scaledgray,0.0,0.7*scaledgray)
         green=RGB(0.0,scaledgray,0.8*scaledgray)
         blue=RGB(0.4*scaledgray,0.0,scaledgray)
-        colors[ii]=green
-        colors[2*colorstepsOneColor-(ii-1)]=blue
-        colors[2*colorstepsOneColor+ii]=red
-        colors[4*colorstepsOneColor-(ii-1)]=blue
-        colors[4*colorstepsOneColor+ii]=green
-        colors[6*colorstepsOneColor-(ii-1)]=blue
+        if colorScheme ==1
+            color1=blue
+            color2=red
+            color3=green
+        else
+            color1=red
+            color2=green
+            color3=blue
+        end
+        colors[ii]=color2
+        colors[2*colorstepsOneColor-(ii-1)]=color3
+        colors[2*colorstepsOneColor+ii]=color1
+        colors[4*colorstepsOneColor-(ii-1)]=color3
+        colors[4*colorstepsOneColor+ii]=color2
+        colors[6*colorstepsOneColor-(ii-1)]=color3
     end
     return (colors,colorsteps)
 end
 
 function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                  radius::Float64,limit::Float64,size::Int64;
-                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0))::Matrix{RGB}
+                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
+                colorScheme::Int64=0)::Matrix{RGB}
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
-    (colors,colorsteps) = initPalette()
+    (colors,colorsteps) = initPalette(colorScheme=colorScheme)
     black=RGB(0.0,0.0,0.0)
     turnItNorm=normalize(turnIt)
     xpos = x-radius
@@ -86,9 +96,9 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             n=1
             c=(xpos,ypos,z,u)*turnItNorm
             v=zero(c)
-            w=zero(c)
+            vold = v
             while true
-                if norm(v)+norm(w)>=limit
+                if norm(v)>=limit
                     image[i,j] = colors[n]
                     break
                 end
@@ -98,8 +108,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                v = 0.07 * v * v + 2.3 * w + c
-                w = 0.07 * w * w - 0.3 * vtemp + c
+                v = v * v + convert(Float64, n%3 -1)*vold + c
                 vold = vtemp
             end
             ypos += step
@@ -112,7 +121,8 @@ end
 function mydraw(fn::String,
                 a::Tuple{Float64, Float64, Float64, Float64},
                 radius::Float64,limit::Float64,size::Int64;
-                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0))
-    image=myimage(a,radius,limit,size,turnIt=turnIt)
+                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
+                colorScheme::Int64=0)
+    image=myimage(a,radius,limit,size,turnIt=turnIt,colorScheme=colorScheme)
     save(fn,image)
 end

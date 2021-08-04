@@ -1,3 +1,11 @@
+pink  @time mydraw("xx.png",(-0.162,0.465,0.0,0.0), 0.013, 1000.0, 6500,colorScheme=1)
+                 vtemp = v
+-                v = 0.07 * v * v + 2.3 * w + c
+-                w = 0.07 * w * w - 0.3 * vtemp + c
++                v = v * v + convert(Float64, n%3 -1)*vold + c
+                 vold = vtemp
+
+
 video: onevect=(1.0,0.0,0.0,0.0)
        basevect=(0.001,-0.001,0.003,-0.005)
        for iii in 1:300
