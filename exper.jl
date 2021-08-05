@@ -61,10 +61,14 @@ function initPalette(;colorScheme::Int64=0)::Tuple{Vector{RGB},Int64}
         red=RGB(scaledgray,0.0,0.7*scaledgray)
         green=RGB(0.0,scaledgray,0.8*scaledgray)
         blue=RGB(0.4*scaledgray,0.0,scaledgray)
-        if colorScheme ==1
+        if colorScheme == 1
             color1=blue
             color2=red
             color3=green
+        elseif colorScheme == 2
+            color1=green
+            color2=blue
+            color3=red
         else
             color1=red
             color2=green
