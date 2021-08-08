@@ -1,3 +1,14 @@
+Waves: @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 8000)
+                 n += 1
+                 vtemp = v
+-                v = v * v + convert(Float64, n%3 -1)*vold + c
++                v = 0.07 * v * v + 2.3 * w + c
++                w = 0.05 * w * w - 0.3 * vtemp + c
+                 vold = vtemp
+
+blue77: time mydraw("xx.png",(-0.16635,0.4700,0.01,-0.015), 0.0008, 1000.0, 7000,colorScheme=2)
+blue7: time mydraw("xx.png",(-0.16635,0.4703,0.01,-0.015), 0.0005, 1000.0, 7000,colorScheme=2)
+
 pink  @time mydraw("xx.png",(-0.162,0.465,0.0,0.0), 0.013, 1000.0, 6500,colorScheme=1)
                  vtemp = v
 -                v = 0.07 * v * v + 2.3 * w + c
@@ -85,6 +96,23 @@ _____________
 
 
 i,j,k,l
+i*i = j*j = k*k = -1
+i j = k, 	j k = i, 	k i = j
+j i = -k,	k j = -i, 	i k = -j
+
+
+#(x1+i*x2+j*x3+k*x4)*(y1+i*y2+j*y3+k*y4)
+# == (x1*y1 + (x2*y1 + x1*y2) * i + (x1*y3 + x3*y1) * j
+#   + (x1*y4 + x4*y1) * k
+# + (x2*y3) * i*j + x3*y2*j*i + x2*y4*i*k + x4*y2*k*i
+# + x3*y4*j*k + x4*y3*k*j + x2*y2*i*i + x3*x3*j*j + x4*y4*k*k
+
+# == (x1*y1 - x2*y2 - x3*x3 - x4*y4)
+#  + (x2*y1 + x1*y2 + x3*y4 - x4*y3) * i + (x1*y3 + x3*y1 - x2*y4 + x4*y2) * j
+#  + (x1*y4 + x4*y1 + x2*y3 - x3*y2) * k
+# 
+
+
 # i*j == -k, j*k == -l, k*l == -i, l*i == -j; i*i==-l; j*j == -i , k*k== -j, l*l== -k
 # i*j*k*l==i*k
 
