@@ -1,8 +1,10 @@
 import Base.+
 import Base.-
 import Base.*
+import Base./
 import Base.zero
 import Base.one
+import Base.inv
 using Images
 using ColorTypes
 
@@ -64,6 +66,11 @@ function conj((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
     return (x1,-x2,-x3,-x4)
 end
 
+function inv((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+             )::Tuple{Float64, Float64, Float64, Float64}
+    return (1.0/(x1*x1+x2*x2+x3*x3+x4*x4))*(x1,-x2,-x3,-x4)
+end
+
 function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
            (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64}
            )::Tuple{Float64, Float64, Float64, Float64}
@@ -71,6 +78,12 @@ function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
             x2*y1+x1*y2+x3*y4-x4*y3,
             x3*y1+x1*y3-x2*y4+x4*y2,
             x1*y4+x4*y1+x2*y3-x3*y2)
+end
+
+function /(a::Tuple{Float64, Float64, Float64, Float64},
+           b::Tuple{Float64, Float64, Float64, Float64}
+           )::Tuple{Float64, Float64, Float64, Float64}
+    return a*inv(b)
 end
 
 function initPalette(;colorScheme::Int64=0)::Tuple{Vector{RGB},Int64}
