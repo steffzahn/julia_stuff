@@ -3,14 +3,19 @@ import Base.-
 import Base.*
 import Base./
 import Base.zero
+import Base.iszero
 import Base.one
 import Base.inv
 using Images
 using ColorTypes
 
-function zero((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+function zero(a::Tuple{Float64, Float64, Float64, Float64}
               )::Tuple{Float64, Float64, Float64, Float64}
     return (0.0,0.0,0.0,0.0)
+end
+function iszero((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+              )::Bool
+    return x1==0.0 && x2==0.0 && x3==0.0 && x4==0.0
 end
 
 function one((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
@@ -149,7 +154,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                v = v * v - (v ⋅ v)*vold + c
+                v = v * v + convert(Float64, n%3 -1)*vold + c
                 vold = vtemp
             end
             ypos += step
