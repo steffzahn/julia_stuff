@@ -1,3 +1,4 @@
+Maelstrom2: @time mydraw("xx.png",(-1.159,0.478,-0.19,0.29), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=5)
 Maelstrom: @time mydraw("xx.png",(-1.159,0.59,0.0,0.0), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=3)
 
 Waves: @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 8000)
