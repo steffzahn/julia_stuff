@@ -1,3 +1,8 @@
+pink7: @time mydraw("xx.png",(-1.3939,0.0294,0.0,0.0), 0.0032, 1000.0, 5200,colorScheme=1,colorFactor=2)
+                vtemp = v
+                v = v * v + convert(Float64, n%3 -1)*vold + c
+                vold = vtemp
+
 Maelstrom2: @time mydraw("xx.png",(-1.159,0.478,-0.19,0.29), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=5)
 Maelstrom: @time mydraw("xx.png",(-1.159,0.59,0.0,0.0), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=3)
 
