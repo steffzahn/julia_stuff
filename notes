@@ -1,3 +1,9 @@
+cube: @time mydraw("xx.png",(-3.09,1.0257,0.0,0.0), 0.021, 1000.0, 5600,colorScheme=0,colorFactor=2)
+                 vtemp = v
+-                v = v * v + convert(Float64, n%3 -1)*vold + c
++                v = 0.03 * v * v * v + c
+                 vold = vtemp
+
 pink7: @time mydraw("xx.png",(-1.3939,0.0294,0.0,0.0), 0.0032, 1000.0, 5200,colorScheme=1,colorFactor=2)
                 vtemp = v
                 v = v * v + convert(Float64, n%3 -1)*vold + c
