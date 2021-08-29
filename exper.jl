@@ -128,14 +128,15 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                  radius::Float64,limit::Float64,size::Int64;
                 turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
                  colorScheme::Int64=0,
-                 colorFactor::Int64=1)::Matrix{RGB}
+                 colorFactor::Int64=1,
+                 colorOffset::Int64=0)::Matrix{RGB}
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
     (colors,colorsteps) = initPalette(colorScheme=colorScheme)
     black=RGB(0.0,0.0,0.0)
     turnItNorm=normalize(turnIt)
     xpos = x-radius
-    colorLimit=div(colorsteps,colorFactor)
+    colorLimit=div(colorsteps-colorOffset,colorFactor)
     for i in 1:size
         ypos = y-radius
         for j in 1:size
@@ -145,7 +146,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             vold = v
             while true
                 if norm(v)>=limit
-                    image[i,j] = colors[n*colorFactor]
+                    image[i,j] = colors[colorOffset+n*colorFactor]
                     break
                 end
                 if n>colorLimit-1
@@ -154,7 +155,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                v = v * v * v + (n%2==1 ? 2.0 : -1.0) * v * v + c
+                v = v * v * v * v * v  + c
                 vold = vtemp
             end
             ypos += step
@@ -169,8 +170,12 @@ function mydraw(fn::String,
                 radius::Float64,limit::Float64,size::Int64;
                 turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
                 colorScheme::Int64=0,
-                colorFactor::Int64=1)
+                colorFactor::Int64=1,
+                colorOffset::Int64=0)
     image=myimage(a,radius,limit,size,
-                  turnIt=turnIt,colorScheme=colorScheme,colorFactor=colorFactor)
+                  turnIt=turnIt,
+                  colorScheme=colorScheme,
+                  colorFactor=colorFactor,
+                  colorOffset=colorOffset)
     save(fn,image)
 end

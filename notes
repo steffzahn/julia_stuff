@@ -1,3 +1,8 @@
+norman: @time mydraw("xx.png",(-0.701,0.433,0.0,0.0), 0.012, 1000.0, 7200,colorScheme=2,colorFactor=5,colorOffset=50)
+                 vtemp = v
+-                v = v * v * v + (n%2==1 ? 2.0 : -1.0) * v * v + c
++                v = v * v * v * v * v  + c
+                 vold = vtemp
 caffrey: @time mydraw("xx.png",(0.5057,0.1926,0.0,0.0), 0.0008, 1000.0, 3650,colorScheme=2,colorFactor=1)
                  vtemp = v
 -                v = 4.0 * v * v * v * v + v * v * v + c
