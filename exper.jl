@@ -155,7 +155,9 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                v = v * v * v * v * v  + c
+                vv = v * v
+                vvvv = vv * vv
+                v = v - v * vv * (1.0/6.0) + v * vvvv * (1.0/120.0) - v * vv* vvvv * (1.0/5040.0) + c
                 vold = vtemp
             end
             ypos += step

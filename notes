@@ -1,4 +1,14 @@
-norman: @time mydraw("xx.png",(-0.701,0.433,0.0,0.0), 0.012, 1000.0, 7200,colorScheme=2,colorFactor=5,colorOffset=50)
+fly: @time mydraw("xx.png",(-2.39,1.22,0.0,0.0), 0.11, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)
+151.525771 seconds (64.00 M allocations: 1.967 GiB, 0.26% gc time)
+                 vtemp = v
+-                v = v * v * v * v * v  + c
++                vv = v * v
++                vvvv = vv * vv
++                v = v - v * vv * (1.0/6.0) + v * vvvv * (1.0/120.0) - v * vv* vvvv * (1.0/5040.0) + c
+                 vold = vtemp
+
+norman: @time mydraw("xx.png",(-0.701,0.433,0.0,0.0), 0.012, 1000.0, 7200,colorScheme=2,colorFactor=5,colorOffset=90)
+        @time mydraw("xx.png",(-0.701,0.433,0.0,0.0), 0.012, 1000.0, 7200,colorScheme=2,colorFactor=5,colorOffset=50)
                  vtemp = v
 -                v = v * v * v + (n%2==1 ? 2.0 : -1.0) * v * v + c
 +                v = v * v * v * v * v  + c
