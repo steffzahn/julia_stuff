@@ -143,7 +143,6 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             n=1
             c=(xpos,ypos,z,u)*turnItNorm
             v=zero(c)
-            o=one(c)
             vold = v
             while true
                 if norm(v)>=limit
@@ -157,11 +156,12 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 n += 1
                 vtemp = v
                 vv = v * v
+                vvv = vv * v
                 vvvv = vv * vv
                 vvvvvv = vv * vvvv
-                v = o + v - vv * (1.0/2.0) - v * vv * (1.0/6.0) + vvvv * (1.0/24.0) +
-                    v * vvvv * (1.0/120.0) - vvvvvv * (1.0/720.0) -
-                    v * vvvvvv * (1.0/5040.0) + vvvv * vvvv * (1.0/40320.0) + c
+                v = v + vvv * (1.0/3.0) +
+                    vv * vvv * (2.0/15.0) +
+                    vvv * vvvv * (17.0/315.0) + vvv * vvvvvv * (62.0/2835.0) + c
                 vold = vtemp
             end
             ypos += step
