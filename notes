@@ -1,3 +1,14 @@
+smooth: @time mydraw("xx.png",(3.7, 0.47, 0.0, 0.0), 0.1, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)
++            o=one(c)
+
+                 vvvv = vv * vv
+-                v = v - v * vv * (1.0/6.0) + v * vvvv * (1.0/120.0) - v * vv* vvvv * (1.0/5040.0) + c
++                vvvvvv = vv * vvvv
++                v = o + v - vv * (1.0/2.0) - v * vv * (1.0/6.0) + vvvv * (1.0/24.0) +
++                    v * vvvv * (1.0/120.0) - vvvvvv * (1.0/720.0) -
++                    v * vvvvvv * (1.0/5040.0) + vvvv * vvvv * (1.0/40320.0) + c
+                 vold = vtemp
+
 fly: @time mydraw("xx.png",(-2.39,1.22,0.0,0.0), 0.11, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)
 151.525771 seconds (64.00 M allocations: 1.967 GiB, 0.26% gc time)
                  vtemp = v
