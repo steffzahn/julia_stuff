@@ -1,3 +1,20 @@
+spider: @time mydraw("xx.png",(2.021, 4.919, 0.0, 0.0), 0.002, 1000.0, 10000,colorScheme=0,colorFactor=5,colorOffset=90)
+                 vvvvvv = vv * vvvv
++                v = v - vv * (1.0/2.0) + vvv * (1.0/3.0) - vvvv * (1.0/4.0) +
++                    v * vvvv * (1.0/5.0) - vvvvvv * (1.0/6.0) +
++                    v * vvvvvv * (1.0/7.0) - vv * vvvvvv * (1.0/8.0) + c
++                vv = v * v
++                vvv = vv * v
++                vvvv = vv * vv
++                vvvvvv = vv * vvvv
++                
+                 v = v + vvv * (1.0/6.0) +
+                     vv * vvv * (1.0/120.0) +
+-                    vvv * vvvv * (1.0/5040.0) + vvv * vvvvvv * (1.0/362880.0) + c
++                    vvv * vvvv * (1.0/5040.0) +
++                    vvv * vvvvvv * (1.0/362880.0) + c
+                 vold = vtemp
+
 heart: @time mydraw("xx.png",(-1.2, -2.3, 0.0, 0.0), 0.018, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)
                  vvvvvv = vv * vvvv
 -                v = v + vvv * (1.0/3.0) +
