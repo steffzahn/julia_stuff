@@ -1,5 +1,10 @@
+hook @time mydraw("xx.png",(0.94, 0.2835, 0.0, 0.0), 0.0035, 1000.0, 6700,colorScheme=0,colorFactor=5,colorOffset=90)
+
+black hole: @time mydraw("xx.png",(-0.0497, 0.3381, 0.0, 0.0), 0.0003, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)
+
 spider: @time mydraw("xx.png",(2.021, 4.919, 0.0, 0.0), 0.002, 1000.0, 10000,colorScheme=0,colorFactor=5,colorOffset=90)
                  vvvvvv = vv * vvvv
+		 # ln x
 +                v = v - vv * (1.0/2.0) + vvv * (1.0/3.0) - vvvv * (1.0/4.0) +
 +                    v * vvvv * (1.0/5.0) - vvvvvv * (1.0/6.0) +
 +                    v * vvvvvv * (1.0/7.0) - vv * vvvvvv * (1.0/8.0) + c
@@ -52,6 +57,7 @@ smooth: @time mydraw("xx.png",(3.7, 0.47, 0.0, 0.0), 0.1, 1000.0, 8000,colorSche
 fly: @time mydraw("xx.png",(-2.39,1.22,0.0,0.0), 0.11, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)
 151.525771 seconds (64.00 M allocations: 1.967 GiB, 0.26% gc time)
                  vtemp = v
+		 # sinus
 -                v = v * v * v * v * v  + c
 +                vv = v * v
 +                vvvv = vv * vv
