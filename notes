@@ -1,3 +1,11 @@
+maelstrom @time mydraw("xx.png",(0.471, 1.08, 0.0, 0.0), 0.047, 1000.0, 10000,colorScheme=0,colorFactor=6,colorOffset=80)
++                # exp x
++                v = o + v + vv * (1.0/2.0) + vvv * (1.0/6.0) +
++                    vvvv * (1.0/24.0) + v * vvvv * (1.0/120.0) +
++                    vvvvvv * (1.0/720.0) + v * vvvvvv * (1.0/5040.0) +
++                    vv * vvvvvv * (1.0/40320.0) +
++                    vvv * vvvvvv * (1.0/362880.0) + c
+
 rose: @time mydraw("xx.png",(2.06, 1.03, 0.0, 0.0), 0.06, 1000.0, 5000,colorScheme=3,colorFactor=5,colorOffset=80)
 +                v = v - vvv * (1.0/6.0) + v * vvvv * (1.0/120.0) -
 +                    vvv * vvvv * (1.0/5040.0) +
