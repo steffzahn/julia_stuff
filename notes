@@ -1,3 +1,11 @@
+rose: @time mydraw("xx.png",(2.06, 1.03, 0.0, 0.0), 0.06, 1000.0, 5000,colorScheme=3,colorFactor=5,colorOffset=80)
++                v = v - vvv * (1.0/6.0) + v * vvvv * (1.0/120.0) -
++                    vvv * vvvv * (1.0/5040.0) +
++                    vvv * vvvvvv * (1.0/362880.0) -
++                    v * vvvv * vvvvvv * (1.0/39916800.0) +
++                    v * vvvvvv * vvvvvv * (1.0/6227020800.0) + c
+                 vold = vtemp
+
 hook @time mydraw("xx.png",(0.94, 0.2835, 0.0, 0.0), 0.0035, 1000.0, 6700,colorScheme=0,colorFactor=5,colorOffset=90)
 
 black hole: @time mydraw("xx.png",(-0.0497, 0.3381, 0.0, 0.0), 0.0003, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=90)

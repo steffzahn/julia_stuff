@@ -109,6 +109,18 @@ function initPalette(;colorScheme::Int64=0)::Tuple{Vector{RGB},Int64}
             color1=green
             color2=blue
             color3=red
+        elseif colorScheme == 3
+            color1=blue
+            color2=green
+            color3=red
+        elseif colorScheme == 4
+            color1=green
+            color2=red
+            color3=blue
+        elseif colorScheme == 5
+            color1=red
+            color2=blue
+            color3=green
         else
             color1=red
             color2=green
@@ -160,11 +172,11 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 vvvv = vv * vv
                 vvvvvv = vv * vvvv
                 # ln x
-                v = v - vv * (1.0/2.0) + vvv * (1.0/3.0) - vvvv * (1.0/4.0) +
-                    v * vvvv * (1.0/5.0) - vvvvvv * (1.0/6.0) +
-                    v * vvvvvv * (1.0/7.0) - vv * vvvvvv * (1.0/8.0) + c
-
-                v = v * v - v * 2.0 + c
+                v = v - vvv * (1.0/6.0) + v * vvvv * (1.0/120.0) -
+                    vvv * vvvv * (1.0/5040.0) +
+                    vvv * vvvvvv * (1.0/362880.0) -
+                    v * vvvv * vvvvvv * (1.0/39916800.0) +
+                    v * vvvvvv * vvvvvv * (1.0/6227020800.0) + c
                 vold = vtemp
             end
             ypos += step
