@@ -1,3 +1,16 @@
+bow @time mydraw("xx.png",(0.2805, 0.0585, 0.0, 0.0), 0.0014, 1000.0, 9000,colorScheme=0,colorFactor=3,colorOffset=50)
+             v=zero(c)
+-            o=one(c)
++            w=zero(c)
+             vold = v
+             while true
+-                if norm(v)>=limit
++                if norm(v)+norm(w)>=limit
+
++                v = v * v + w + c
++                w = w * w - vtemp + c
+                 vold = vtemp
+
 maelstrom @time mydraw("xx.png",(0.471, 1.08, 0.0, 0.0), 0.047, 1000.0, 10000,colorScheme=0,colorFactor=6,colorOffset=80)
 +                # exp x
 +                v = o + v + vv * (1.0/2.0) + vvv * (1.0/6.0) +
