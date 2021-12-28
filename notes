@@ -1,3 +1,9 @@
+star @time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 4.0, 1000.0, 6500,colorScheme=0,colorFactor=5,colorOffset=80)
+                 vtemp = v
++                v = v * v * (1.0/77.0) + w + c
++                w = w * w * (1.0/5.0) - vtemp + c
+                 vold = vtemp
+
 bow @time mydraw("xx.png",(0.2805, 0.0585, 0.0, 0.0), 0.0014, 1000.0, 9000,colorScheme=0,colorFactor=3,colorOffset=50)
              v=zero(c)
 -            o=one(c)
