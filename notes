@@ -1,3 +1,8 @@
+camel @time mydraw("xx.png",(0.0455, 0.018, 0.0, 0.0), 0.0045, 1000.0, 7200,colorScheme=0,colorFactor=4,colorOffset=70)
+                 vtemp = v
+                 v = v * v * (1.0/13.0) + w + c
+                 w = w * w * (1.0/11.0) + vtemp + c
+
 star @time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 4.0, 1000.0, 6500,colorScheme=0,colorFactor=5,colorOffset=80)
                  vtemp = v
 +                v = v * v * (1.0/77.0) + w + c
