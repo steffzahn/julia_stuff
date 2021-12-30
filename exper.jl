@@ -156,7 +156,6 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             c=(xpos,ypos,z,u)*turnItNorm
             v=zero(c)
             w=zero(c)
-            vold = v
             while true
                 if norm(v)+norm(w)>=limit
                     image[i,j] = colors[colorOffset+n*colorFactor]
@@ -168,9 +167,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                v = v * v * (1.0/7.0) + w + c
-                w = w * w * w * (1.0/43.0) + vtemp + c
-                vold = vtemp
+                v = v * v * (1.0/77783.0) + w + c
+                w = w * w * (1.0/5.0) - vtemp + c
             end
             ypos += step
         end
