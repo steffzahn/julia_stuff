@@ -1,3 +1,8 @@
+appendix @time mydraw("xx.png",(-0.3985, 0.513, 0.0, 0.0), 0.003, 1000.0, 5900,colorScheme=0,colorFactor=4,colorOffset=70)
+                 vtemp = v
+                 v = v * v * (1.0/7.0) + w + c
+                 w = w * w * w * (1.0/43.0) + vtemp + c
+
 chain @time mydraw("xx.png",(0.013, 0.028, 0.0, 0.0), 0.004, 1000.0, 9000,colorScheme=0,colorFactor=4,colorOffset=70)
                  vtemp = v
                  v = v * v * (1.0/2.0) + w + c
