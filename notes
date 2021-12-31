@@ -1,3 +1,8 @@
+salad @time mydraw("xx.png",(0.0, 7.0, 0.0, 0.0), 0.45, 1000.0, 5050,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=2)
+                 vtemp = v
+                 v = v * v * (1.0/1999.0) + w + c
+                 w = w * w * w * (1.0/67.0) - vtemp + c
+
 abyss @time mydraw("xx.png",(22.0, 42.3, 0.0, 0.0), 1.0, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=70)
                  vtemp = v
                  v = v * v * (1.0/1999.0) + w + c
