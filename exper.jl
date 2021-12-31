@@ -91,9 +91,10 @@ function /(a::Tuple{Float64, Float64, Float64, Float64},
     return a*inv(b)
 end
 
-function initPalette(;colorScheme::Int64=0)::Tuple{Vector{RGB},Int64}
+function initPalette(;colorScheme::Int64=0,
+                     colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
     colorstepsOneColor=256
-    colorsteps=6*colorstepsOneColor
+    colorsteps=6*colorRepetitions*colorstepsOneColor
     gray = 1.0/convert(Float64,colorstepsOneColor)
     colors=Array{RGB}(UndefInitializer(),colorsteps)
     for ii in 1:colorstepsOneColor
@@ -126,25 +127,28 @@ function initPalette(;colorScheme::Int64=0)::Tuple{Vector{RGB},Int64}
             color2=green
             color3=blue
         end
-        colors[ii]=color2
-        colors[2*colorstepsOneColor-(ii-1)]=color2
-        colors[2*colorstepsOneColor+ii]=color1
-        colors[4*colorstepsOneColor-(ii-1)]=color1
-        colors[4*colorstepsOneColor+ii]=color3
-        colors[6*colorstepsOneColor-(ii-1)]=color3
+        for jj in 0:colorRepetitions-1
+            colors[jj*6*colorstepsOneColor+ii]=color2
+            colors[(jj*6+2)*colorstepsOneColor-(ii-1)]=color2
+            colors[(jj*6+2)*colorstepsOneColor+ii]=color1
+            colors[(jj*6+4)*colorstepsOneColor-(ii-1)]=color1
+            colors[(jj*6+4)*colorstepsOneColor+ii]=color3
+            colors[(jj*6+6)*colorstepsOneColor-(ii-1)]=color3
+        end
     end
     return (colors,colorsteps)
 end
 
 function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                  radius::Float64,limit::Float64,size::Int64;
-                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
+                 turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
                  colorScheme::Int64=0,
                  colorFactor::Int64=1,
-                 colorOffset::Int64=0)::Matrix{RGB}
+                 colorOffset::Int64=0,
+                 colorRepetitions::Int64=1)::Matrix{RGB}
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
-    (colors,colorsteps) = initPalette(colorScheme=colorScheme)
+    (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
     black=RGB(0.0,0.0,0.0)
     turnItNorm=normalize(turnIt)
     xpos = x-radius
@@ -183,11 +187,13 @@ function mydraw(fn::String,
                 turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
                 colorScheme::Int64=0,
                 colorFactor::Int64=1,
-                colorOffset::Int64=0)
+                colorOffset::Int64=0,
+                colorRepetitions::Int64=1)
     image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
-                  colorOffset=colorOffset)
+                  colorOffset=colorOffset,
+                  colorRepetitions=colorRepetitions)
     save(fn,image)
 end
