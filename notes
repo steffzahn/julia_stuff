@@ -1,3 +1,8 @@
+sieve @time mydraw("xx.png",(-5.15, 0.85, 0.0, 0.0), 0.18, 1000.0, 5600,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                 vtemp = v
+                 v = v * v * (1.0/37.0) + w + c
+                 w = w * w * w * (1.0/37.0) - vtemp + c
+
 flames @time mydraw("xx.png",(-7.5, -6.5, 0.0, 0.0), 2.0, 1000.0, 4300,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=3)
                  vtemp = v
                  v = v * v * (1.0/181.0) + w + c
