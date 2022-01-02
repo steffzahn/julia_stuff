@@ -1,3 +1,9 @@
+triangle @time mydraw("xx.png",(-1.76325, 1.0285, 0.0, 0.0), 0.0075, 1000.0, 6600,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+266.011117 seconds (43.57 M allocations: 1.339 GiB, 0.06% gc time)
+                 vtemp = v
+                 v = v * v * (1.0/73.0) + w + c
+                 w = w * w * vtemp * (1.0/7.0) - vtemp + c
+
 shield @time mydraw("xx.png",(-0.2, 0.0, 0.0, 0.0), 0.8, 1000.0, 5100,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
                  vtemp = v
                  v = v * v * (1.0/11.0) + w + c
