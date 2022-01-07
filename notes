@@ -1,3 +1,8 @@
+goblet time mydraw("xx.png",(-0.5, 0.0, 0.0, 0.0), 0.25, 1000.0, 7000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                 vtemp = v
+                 v = (v * v - v * v * v * v) * (1.0/17.0) + w + c
+                 w = w * w - vtemp + c
+
 fish @time mydraw("xx.png",(0.0, -0.35, 0.0, 0.0), 2.2, 1000.0, 10000,colorScheme=5,colorFactor=5,colorOffset=70,colorRepetitions=8,turnIt=(0.0,-1.0,0.0,0.0))
                  vtemp = v
                  v = v * v * (1.0/17.0) + w + c
