@@ -1,3 +1,12 @@
+worms @time mydraw("xx.png",(0.04, 0.85, 0.0, 0.0), 0.062, 1000.0, 8000,colorScheme=0,colorFactor=13,colorOffset=70,colorRepetitions=8)
+                 vtemp = v
+                 vinv = inv(v)
+                 if isnan(vinv)
+                     vinv = zero(vinv)
+                 end
+                 v = v * v * v * (1.0/8.0) + w + c
+                 w = w * w + vinv * (1.0/61.0) - vtemp + c
+
 nsfw @time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 1.0, 1000.0, 8000,colorScheme=0,colorFactor=6,colorOffset=70,colorRepetitions=28)
                  vtemp = v
                  v = v * v * (1.0/4.0) - v * v * v * (1.0/8.0) + w + c
