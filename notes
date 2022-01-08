@@ -1,3 +1,8 @@
+blosseom julia> @time mydraw("xx.png",(0.658, 0.3, 0.0, 0.0), 0.092, 1000.0, 5900,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                 vtemp = v
+                 v = (v * v - v * v * v * v) * (1.0/17.0) + w + c
+                 w = w * w - vtemp + c
+
 goblet time mydraw("xx.png",(-0.5, 0.0, 0.0, 0.0), 0.25, 1000.0, 7000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
                  vtemp = v
                  v = (v * v - v * v * v * v) * (1.0/17.0) + w + c
