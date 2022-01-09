@@ -1,3 +1,12 @@
+ring @time mydraw("xx.png",(0.05, 0.0, 0.0, 0.0), 0.33, 1000.0, 5000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                vtemp = v
+                vinv = inv(v)
+                if isnan(vinv)
+                    vinv = zero(vinv)
+                end
+                v = v * v * (1.0/11.0) + w + c
+                w = vinv * vinv * vinv * (1.0/37.0) - vtemp + c
+
 eagle @time mydraw("xx.png",(0.17, 0.0, 0.0, 0.0), 0.8, 1000.0, 6700,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
 113.141171 seconds (44.90 M allocations: 1.380 GiB, 0.28% gc time)
                 vtemp = v
