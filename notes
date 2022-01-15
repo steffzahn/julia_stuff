@@ -1,3 +1,13 @@
+water @time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 4.7, 1000.0, 8000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                vtemp = v
+                vinv = inv(v)
+                if isnan(vinv)
+                    vinv = zero(vinv)
+                end
+                v = v * v * v * (1.0/117.0) + w + c
+                t=vtemp+vinv
+                w = t * t * t * (1.0/130.0) + vtemp + c
+
 bubbles @time mydraw("xx.png",(-0.01, 0.1, 0.0, 0.0), 0.05, 1000.0, 4000,colorScheme=0,colorFactor=3,colorOffset=70,colorRepetitions=3)
                 vtemp = v
                 vinv = inv(v)
