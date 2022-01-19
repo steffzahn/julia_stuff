@@ -1,3 +1,18 @@
+crown @time mydraw("xx.png",(-0.073, 0.0, 0.0, 0.0), 0.047, 1000.0, 5400,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                vtemp = v
+                vinv = inv(v)
+                if isnan(vinv)
+                    vinv = zero(vinv)
+                end
+                winv = inv(w)
+                if isnan(winv)
+                    winv = zero(winv)
+                end
+                s=v*v+winv
+                t=w*w-vinv
+                v = s * s * (1.0/2273.0)  + w + c
+                w = t * t * t * (1.0/3709.0) + vtemp + c
+
 circle @time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 0.8, 500.0, 5000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
                 vtemp = v
                 vinv = inv(v)
