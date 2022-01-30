@@ -1,3 +1,8 @@
+cauliflower @time mydraw("xx.png",(-0.2136, 0.0181, 0.0, 0.0), 0.0013, 1000.0, 11000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+                vtemp = v
+                v = v * v * 5.0  + w + c
+                w = vtemp * vtemp * vtemp - vtemp * vtemp * 0.3 - vtemp + c
+
 crown @time mydraw("xx.png",(-0.073, 0.0, 0.0, 0.0), 0.047, 1000.0, 5400,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
                 vtemp = v
                 vinv = inv(v)
@@ -88,7 +93,7 @@ nsfw @time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 1.0, 1000.0, 8000,colorScheme=0
                  v = v * v * (1.0/4.0) - v * v * v * (1.0/8.0) + w + c
                  w = w * w - vtemp + c
 
-blosseom julia> @time mydraw("xx.png",(0.658, 0.3, 0.0, 0.0), 0.092, 1000.0, 5900,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+blossom julia> @time mydraw("xx.png",(0.658, 0.3, 0.0, 0.0), 0.092, 1000.0, 5900,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
                  vtemp = v
                  v = (v * v - v * v * v * v) * (1.0/17.0) + w + c
                  w = w * w - vtemp + c
