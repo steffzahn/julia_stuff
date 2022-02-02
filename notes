@@ -1,3 +1,8 @@
+rainbow @time mydraw("xx.png",(-0.22, 0.0, 0.0, 0.0), 0.42, 10.0, 7200,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1)
+                vtemp = v
+                v = v * v * 5.0  + w + c
+                w = vtemp * vtemp * vtemp - vtemp * vtemp * 0.3 - vtemp + c
+
 cauliflower @time mydraw("xx.png",(-0.2136, 0.0181, 0.0, 0.0), 0.0013, 1000.0, 11000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
                 vtemp = v
                 v = v * v * 5.0  + w + c

@@ -167,8 +167,10 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             v=zero(c)
             w=zero(c)
             while true
-                if norm(v + w)>=limit
-                    image[i,j] = colors[colorOffset+n*colorFactor]
+                currentNorm=norm(v+w)
+                if currentNorm>=limit
+                    value=1+convert(Int64,trunc(((n * limit * (colorLimit-1))/(currentNorm+(n-1)*limit)))
+                    image[i,j] = colors[colorOffset+value*colorFactor]
                     break
                 end
                 if n>colorLimit-1
