@@ -1,3 +1,5 @@
+rainbow2 @time mydraw("xx.png",(-0.22, 0.0, 0.0, 0.0), 0.42, 10.0, 7600,colorScheme=3,colorFactor=1,colorOffset=70,colorRepetitions=1)
+
 rainbow @time mydraw("xx.png",(-0.22, 0.0, 0.0, 0.0), 0.42, 10.0, 7200,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1)
                 vtemp = v
                 v = v * v * 5.0  + w + c
