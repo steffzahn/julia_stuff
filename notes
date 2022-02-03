@@ -1,3 +1,16 @@
+alien @time mydraw("xx.png",(-3.9, 0.0, 0.0, 0.0), 1.85, 1000.0, 6800,colorScheme=1,colorFactor=1,colorOffset=70,colorRepetitions=1)
+                vtemp = v
+                vinv=inv(v)
+                if isnan(vinv)
+                    vinv=zero(v)
+                end
+                winv=inv(w)
+                if isnan(winv)
+                    winv=zero(w)
+                end
+                v = v * v * 0.4 + vinv * vinv + w + c
+                w = w * w * 0.2 + winv * winv * winv- vtemp + c
+
 brain @time mydraw("xx.png",(-0.8, 0.0, 0.0, 0.0), 2.0, 1028.30, 7600,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1)
                 vtemp = v
                 vinv=inv(v)
