@@ -1,3 +1,12 @@
+brain @time mydraw("xx.png",(-0.8, 0.0, 0.0, 0.0), 2.0, 1028.30, 7600,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1)
+                vtemp = v
+                vinv=inv(v)
+                if isnan(vinv)
+                    vinv=zero(v)
+                end
+                v = v * v + vinv * vinv + w + c
+                w = w * w * 0.3 - vtemp + c
+
 rainbow2 @time mydraw("xx.png",(-0.22, 0.0, 0.0, 0.0), 0.42, 10.0, 7600,colorScheme=3,colorFactor=1,colorOffset=70,colorRepetitions=1)
 
 rainbow @time mydraw("xx.png",(-0.22, 0.0, 0.0, 0.0), 0.42, 10.0, 7200,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1)
