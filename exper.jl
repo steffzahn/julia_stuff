@@ -188,8 +188,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 if isnan(winv)
                     winv=zero(w)
                 end
-                v = v * v * 0.4 + vinv * vinv + w + c
-                w = w * w * 0.2 + winv * winv * winv- vtemp + c
+                v = v * v * 0.07 + vinv * vinv + w + c
+                w = w * w * 0.1 + winv * winv * winv - vinv + vtemp + c
             end
             ypos += step
         end
