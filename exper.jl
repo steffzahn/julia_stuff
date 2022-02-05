@@ -165,9 +165,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             n=1
             c=(xpos,ypos,z,u)*turnItNorm
             v=zero(c)
-            w=zero(c)
             while true
-                currentNorm=norm(v+w)
+                currentNorm=norm(v)
                 if currentNorm>=limit
                     n1 = (n - 1) * sqrt(n - 1)
                     value=1+convert(Int64,trunc((((1 + n1) * limit * (colorLimit-1))/(currentNorm+n1*limit))))
@@ -179,17 +178,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vtemp = v
-                vinv=inv(v)
-                if isnan(vinv)
-                    vinv=zero(v)
-                end
-                winv=inv(w)
-                if isnan(winv)
-                    winv=zero(w)
-                end
-                v = v * v * 0.07 + vinv * vinv + w + c
-                w = w * w * 0.1 + winv * winv * winv - vinv + vtemp + c
+                vv = (v[2],abs(v[1]),-v[3]+0.1,-v[4]-0.2)
+                v = v * vv * 0.07 + v + c
             end
             ypos += step
         end
