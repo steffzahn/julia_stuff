@@ -1,3 +1,5 @@
+#  Steffen Zahn
+
 import Base.+
 import Base.-
 import Base.*
@@ -178,7 +180,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vv = (v[2]-42.0*v[4],abs(v[1]),-v[3]+0.1,-v[4]-0.2)
+                vv = (v[2]-17.0*v[4],abs(v[1])+35.0*v[3],-v[3]+0.1,-v[4]-0.2)
                 v = v * vv * 0.07 + v + c
             end
             ypos += step
@@ -203,4 +205,17 @@ function mydraw(fn::String,
                   colorOffset=colorOffset,
                   colorRepetitions=colorRepetitions)
     save(fn,image)
+end
+
+function myvideosequence()
+    radius=222.0
+    for iii in 1:600
+        fn="xx_$(iii).png"
+        println(iii," ",radius)
+        mydraw(fn,(-6.040905, -31.87265, 0.0, 0.0), radius, 250000.0, 1000,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1)
+        radius=radius*0.97
+    end
+
+    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
+    #  xffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 2 -vf scale=600:600 -b:a 128k output.mp4
 end
