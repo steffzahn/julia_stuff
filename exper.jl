@@ -209,7 +209,6 @@ end
 
 function myvideosequence()
     radius=18.0
-    @time mydraw("xx.png",(-4.1, -32.0, 0.0, 0.0), 7.9, 10000.0, 4000,colorScheme=1,colorFactor=1,colorOffset=70,colorRepetitions=1)
     center=(-4.16079333690, -32.2892010169, 0.0, 0.0)
     angleDelta=normalize(inv((90.0,1.0,0.0,0.0)))
     angle=one(center)
