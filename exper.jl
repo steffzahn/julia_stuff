@@ -180,8 +180,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vv = (v[2],abs(v[1]),-v[3]+0.1,-v[4]-0.2)
-                v = v * vv * 0.07 + v + c
+                vv = (max(v[2],v[3]),max(v[3],v[4]),max(v[4],v[1]),max(v[1],v[2]))
+                v = v * vv * vv * 0.06 + v + c
             end
             ypos += step
         end
@@ -208,8 +208,8 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=18.0
-    center=(-4.16079333690, -32.2892010169, 0.0, 0.0)
+    radius=44.0
+    center=(-5.76979903000, -20.48176500254, 0.0, 0.0)
     angleDelta=normalize(inv((90.0,1.0,0.0,0.0)))
     angle=one(center)
     for iii in 1:700
