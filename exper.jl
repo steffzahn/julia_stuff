@@ -211,16 +211,16 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=44.0
-    center=(-5.76979903000, -20.48176500254, 0.0, 0.0)
+    radius=2.8
+    center=(-1.0, 0.5, 0.0, 0.0)
     angleDelta=normalize(inv((90.0,1.0,0.0,0.0)))
-    angle=one(center)
+    angle=(0.0,1.0,0.7,1.3)
     for iii in 1:700
         fn="xx_$(iii).png"
         println(iii," ",radius)
-        mydraw(fn,center/angle, radius, 25000.0, 1000,colorScheme=1,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
-        radius=radius*0.9695
-        angle=angle*angleDelta
+        mydraw(fn,center, radius, 200.0, 1000,colorScheme=1,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
+        # radius=radius*0.9695
+        angle = angle*angleDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
