@@ -210,11 +210,25 @@ function mydraw(fn::String,
     save(fn,image)
 end
 
+function smallAngle(x::Tuple{Float64, Float64, Float64, Float64}
+               )::Tuple{Float64, Float64, Float64, Float64}
+    # 90,1,0,0
+    if x[4]!=0.0
+        return normalize((90.0,1.0,0.0,(-x[1]*90.0-x[2])/x[4]))
+    elseif x[3]!=0.0
+        return normalize((90.0,1.0,(-x[1]*90.0-x[2])/x[3],0.0))
+    elseif x[2]!=0.0
+        return normalize((90.0,(-x[1]*90.0-x[3])/x[2],1.0,0.0))
+    else
+        return normalize((0.0,90.0,1.0,(-x[2]*90.0-x[3])/x[1]))
+    end
+end
+
 function myvideosequence()
-    radius=2.8
-    center=(-1.0, 0.5, 0.0, 0.0)
-    angleDelta=normalize(inv((90.0,1.0,0.0,0.0)))
-    angle=(0.0,1.0,0.7,1.3)
+    radius=5.0
+    center=(0.0, 0.0, 0.0, 0.0)
+    angle=(0.0,1.0,-0.5,0.4)
+    angleDelta=smallAngle(angle)
     for iii in 1:700
         fn="xx_$(iii).png"
         println(iii," ",radius)
