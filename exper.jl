@@ -165,7 +165,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
         ypos = y-radius
         for j in 1:size
             n=1
-            c=(xpos,ypos,z,u)*turnItNorm
+            c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
             while true
                 currentNorm=norm(v)
