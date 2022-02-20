@@ -153,7 +153,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                  colorScheme::Int64=0,
                  colorFactor::Int64=1,
                  colorOffset::Int64=0,
-                 colorRepetitions::Int64=1)::Matrix{RGB}
+                 colorRepetitions::Int64=1,
+                 discrete::Bool=false)::Matrix{RGB}
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
     (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
@@ -170,9 +171,13 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             while true
                 currentNorm=norm(v)
                 if currentNorm>=limit
-                    n1 = (n - 1) * sqrt(n - 1)
-                    value=1+convert(Int64,trunc((((1 + n1) * limit * (colorLimit-1))/(currentNorm+n1*limit))))
-                    image[i,j] = colors[colorOffset+value*colorFactor]
+                    if discrete
+                      image[i,j] = colors[colorOffset+n*colorFactor]
+                    else
+                        n1 = (n - 1) * sqrt(n - 1)
+                        value=1+convert(Int64,trunc((((1 + n1) * limit * (colorLimit-1))/(currentNorm+n1*limit))))
+                        image[i,j] = colors[colorOffset+value*colorFactor]
+                    end
                     break
                 end
                 if n>colorLimit-1
@@ -200,13 +205,15 @@ function mydraw(fn::String,
                 colorScheme::Int64=0,
                 colorFactor::Int64=1,
                 colorOffset::Int64=0,
-                colorRepetitions::Int64=1)
+                colorRepetitions::Int64=1,
+                discrete::Bool=false)
     image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
                   colorOffset=colorOffset,
-                  colorRepetitions=colorRepetitions)
+                  colorRepetitions=colorRepetitions,
+                  discrete=discrete)
     save(fn,image)
 end
 
