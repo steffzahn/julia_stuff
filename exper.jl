@@ -99,6 +99,16 @@ function /(a::Tuple{Float64, Float64, Float64, Float64},
     return a*inv(b)
 end
 
+# wrong multiplication
+function funnyMultiply((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
+           (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64}
+           )::Tuple{Float64, Float64, Float64, Float64}
+     return (x1*y1-x2*y2-x3*y3-x4*y4,
+             x2*y1+x1*y2+x3*y4+x4*y3,
+             x3*y1+x1*y3+x2*y4+x4*y2,
+             x1*y4+x4*y1+x2*y3+x3*y2)
+end
+
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
     colorstepsOneColor=256
@@ -168,6 +178,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             n=1
             c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
+            w=zero(c)
+            vold = v
             while true
                 currentNorm=norm(v)
                 if currentNorm>=limit
@@ -185,11 +197,10 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vv = (v[2]*v[2]*v[2]+3.0*v[2]*v[2]+1.0,
-                      v[3]*v[3]-3.0,
-                      1.0+0.5*v[4]+0.25*v[4]*v[4]-0.125*v[4]*v[4]*v[4],
-                      v[1]-0.3*v[1]*v[1]+7.0)
-                v = v * vv * 0.04 + v + c
+                vtemp = v
+                v = 0.07 * funnyMultiply(v,v) + 2.3 * w + c
+                w = 0.05 * funnyMultiply(w,w) - 0.3 * vtemp + c
+                vold = vtemp
             end
             ypos += step
         end

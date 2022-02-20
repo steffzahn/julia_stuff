@@ -390,24 +390,12 @@ pink7: @time mydraw("xx.png",(-1.3939,0.0294,0.0,0.0), 0.0032, 1000.0, 5200,colo
 Maelstrom2: @time mydraw("xx.png",(-1.159,0.478,-0.19,0.29), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=5)
 Maelstrom: @time mydraw("xx.png",(-1.159,0.59,0.0,0.0), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=3)
 
-Waves: @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 8000)
-git checkout b5d8aebf8e67b19ceb29d509cb22588dbb0fc042 -- exper.jl 
-            v=zero(c)
-            w=zero(c)
-            vold = v
-            while true
-                if norm(v)>=limit
-                    image[i,j] = colors[n]
-                    break
-                end
-                if n>colorsteps-1
-                    image[i,j] = black
-                    break
-                end
-                n += 1
+Waves: @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 1000,colorScheme=0,colorFactor=1,colorOffset=0,colorRepetitions=1,discrete=true)
+                currentNorm=norm(v)
+         ......
                 vtemp = v
-                v = 0.07 * v * v + 2.3 * w + c
-                w = 0.05 * w * w - 0.3 * vtemp + c
+                v = 0.07 * funnyMultiply(v,v) + 2.3 * w + c
+                w = 0.05 * funnyMultiply(w,w) - 0.3 * vtemp + c
                 vold = vtemp
 
 blue77: time mydraw("xx.png",(-0.16635,0.4700,0.01,-0.015), 0.0008, 1000.0, 7000,colorScheme=2)
