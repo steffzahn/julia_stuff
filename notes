@@ -1,3 +1,5 @@
+yellow
+alive
 waves3 @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 8000,colorScheme=9,colorFactor=1,colorOffset=0,colorRepetitions=1,discrete=true)
 
 waves2 @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 1000,colorScheme=6,colorFactor=1,colorOffset=0,colorRepetitions=1,discrete=true)

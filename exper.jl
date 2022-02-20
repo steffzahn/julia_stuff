@@ -247,18 +247,16 @@ function myvideosequence()
     center=(-3.0, 0.0, 0.0, 0.0)
     angle=one(center)
     angleDeltaList=(
-    normalize(inv((90.0,1.0,0.0,0.0))),
-    normalize(inv((90.0,0.0,1.0,0.0))),
-    normalize(inv((90.0,0.0,0.0,1.0))),
-    normalize(inv((90.0,0.0,0.0,-1.0))),
-    normalize(inv((90.0,0.0,-1.0,0.0))),
-    normalize(inv((90.0,-1.0,0.0,0.0)))
+    normalize(inv((70.0,0.0,1.0,0.0))),
+    normalize(inv((70.0,0.0,0.0,1.0))),
+    normalize(inv((70.0,0.0,0.0,-1.0))),
+    normalize(inv((70.0,0.0,-1.0,0.0)))
     )
     angleDelta=angleDeltaList[1]
     for iii in 1:700
         fn="xx_$(iii).png"
         println(iii," ",radius)
-        mydraw(fn,center, radius, 2000.0, 1000,colorScheme=6,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
+        mydraw(fn,center, radius, 2000.0, 1000,colorScheme=7,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
         #radius=radius*0.975
         if iii % 70 == 1
             angleDelta=angleDeltaList[1 + abs(rand(Int64)) % length(angleDeltaList)]
