@@ -111,39 +111,53 @@ end
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
+    colorSet=0
+    if colorScheme>=6
+        colorSet=1
+        colorScheme -= 6
+    end
     colorstepsOneColor=256
     colorsteps=6*colorRepetitions*colorstepsOneColor
     gray = 1.0/convert(Float64,colorstepsOneColor)
     colors=Array{RGB}(UndefInitializer(),colorsteps)
     for ii in 1:colorstepsOneColor
-        scaledgray=gray*ii
-        red=RGB(scaledgray,0.0,0.7*scaledgray)
-        green=RGB(0.0,scaledgray,0.8*scaledgray)
-        blue=RGB(0.4*scaledgray,0.0,scaledgray)
-        if colorScheme == 1
-            color1=blue
-            color2=red
-            color3=green
-        elseif colorScheme == 2
-            color1=green
-            color2=blue
-            color3=red
-        elseif colorScheme == 3
-            color1=blue
-            color2=green
-            color3=red
-        elseif colorScheme == 4
-            color1=green
-            color2=red
-            color3=blue
-        elseif colorScheme == 5
-            color1=red
-            color2=blue
-            color3=green
+        scaledGray=gray*ii
+        baseColor1=RGB(0.0,0.0,0.0)
+        baseColor2=baseColor1
+        baseColor3=baseColor1
+        if colorSet == 0
+            baseColor1=RGB(scaledGray,0.0,0.7*scaledGray)
+            baseColor2=RGB(0.0,scaledGray,0.8*scaledGray)
+            baseColor3=RGB(0.4*scaledGray,0.0,scaledGray)
         else
-            color1=red
-            color2=green
-            color3=blue
+            baseColor1=RGB(scaledGray,0.0,0.4*scaledGray)
+            baseColor2=RGB(0.635294*scaledGray,scaledGray,0.0)
+            baseColor3=RGB(0.0,0.815686*scaledGray,scaledGray)
+        end
+        if colorScheme == 1
+            color1=baseColor3
+            color2=baseColor1
+            color3=baseColor2
+        elseif colorScheme == 2
+            color1=baseColor2
+            color2=baseColor3
+            color3=baseColor1
+        elseif colorScheme == 3
+            color1=baseColor3
+            color2=baseColor2
+            color3=baseColor1
+        elseif colorScheme == 4
+            color1=baseColor2
+            color2=baseColor1
+            color3=baseColor3
+        elseif colorScheme == 5
+            color1=baseColor1
+            color2=baseColor3
+            color3=baseColor2
+        else
+            color1=baseColor1
+            color2=baseColor2
+            color3=baseColor3
         end
         for jj in 0:colorRepetitions-1
             colors[jj*6*colorstepsOneColor+ii]=color2
