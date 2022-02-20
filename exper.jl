@@ -210,30 +210,27 @@ function mydraw(fn::String,
     save(fn,image)
 end
 
-function smallAngle(x::Tuple{Float64, Float64, Float64, Float64}
-               )::Tuple{Float64, Float64, Float64, Float64}
-    # 90,1,0,0
-    if x[4]!=0.0
-        return normalize((90.0,1.0,0.0,(-x[1]*90.0-x[2])/x[4]))
-    elseif x[3]!=0.0
-        return normalize((90.0,1.0,(-x[1]*90.0-x[2])/x[3],0.0))
-    elseif x[2]!=0.0
-        return normalize((90.0,(-x[1]*90.0-x[3])/x[2],1.0,0.0))
-    else
-        return normalize((0.0,90.0,1.0,(-x[2]*90.0-x[3])/x[1]))
-    end
-end
-
 function myvideosequence()
     radius=5.0
     center=(0.0, 0.0, 0.0, 0.0)
-    angle=(0.0,1.0,-0.5,0.4)
-    angleDelta=smallAngle(angle)
+    angle=(-0.9,1.0,-1.3,0.4)
+    angleDeltaList=(
+    normalize(inv((90.0,1.0,0.0,0.0))),
+    normalize(inv((90.0,0.0,1.0,0.0))),
+    normalize(inv((90.0,0.0,0.0,1.0))),
+    normalize(inv((90.0,0.0,0.0,-1.0))),
+    normalize(inv((90.0,0.0,-1.0,0.0))),
+    normalize(inv((90.0,-1.0,0.0,0.0))),
+    )
+    angleDelta=angleDeltaList[1]
     for iii in 1:700
         fn="xx_$(iii).png"
         println(iii," ",radius)
-        mydraw(fn,center, radius, 200.0, 1000,colorScheme=1,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
-        # radius=radius*0.9695
+        mydraw(fn,center, radius, 200.0, 1000,colorScheme=0,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
+        radius=radius*0.975
+        if iii % 70 == 1
+            angleDelta=angleDeltaList[1 + abs(rand(Int64)) % length(angleDeltaList)]
+        end
         angle = angle*angleDelta
     end
 
