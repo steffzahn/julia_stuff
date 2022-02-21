@@ -1,3 +1,7 @@
+yellow2
+                v = 0.07 * funnyMultiply(v,v) + 2.3 * w + c
+                w = 0.05 * funnyMultiply(w,w) - 0.3 * vtemp + c
+
 yellow
 alive
 waves3 @time mydraw("xx.png",(-3.13,0.31,1.0,0.0), 0.05, 1000.0, 8000,colorScheme=9,colorFactor=1,colorOffset=0,colorRepetitions=1,discrete=true)
