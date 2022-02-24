@@ -212,8 +212,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                v = 0.07 * funnyMultiply(v,v) + 2.3 * w + c
-                w = 0.05 * funnyMultiply(w,w) - 0.3 * vtemp + c
+                v = 0.3 * v*v + w + c
+                w = 0.1 * w * w * w - 0.03 * w * w - 0.5 * vtemp * vtemp + vtemp + c
                 vold = vtemp
             end
             ypos += step
@@ -243,9 +243,9 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=6.6
-    center=(-3.0, 0.0, 0.0, 0.0)
-    angle=one(center)
+    radius=2.2
+    center=(-0.36, 0.0, 0.0, 0.0)
+    angle=normalize((1.0, 0.0, 0.0, 1.3))
     angleDeltaList=(
     normalize(inv((70.0,0.0,1.0,1.0))),
     normalize(inv((70.0,0.0,1.0,-1.0))),
@@ -263,13 +263,14 @@ function myvideosequence()
     angleDelta=angleDeltaList[1]
     for iii in 1:700
         fn="xx_$(iii).png"
-        println(iii," ",radius)
-        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=7,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
-        #radius=radius*0.975
-        if iii % 70 == 1
+        if iii % 100 == 1
             angleDelta=angleDeltaList[1 + abs(rand(Int64)) % length(angleDeltaList)]
         end
+        println(iii," ",radius, " ", angleDelta)
+        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=8,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
+        radius=radius*0.9968
         angle = angle*angleDelta
+        center += (0.0001,0.0,0.0,0.0)
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
