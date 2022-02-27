@@ -193,7 +193,6 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
             w=zero(c)
-            vold = v
             while true
                 currentNorm=norm(v)
                 if currentNorm>=limit
@@ -211,10 +210,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vtemp = v
-                v = 0.3 * v*v + w + c
-                w = 0.1 * w * w * w - 0.03 * w * w - 0.5 * vtemp * vtemp + vtemp + c
-                vold = vtemp
+                vv = (max(v[2],v[3]),max(v[3],v[4]),max(v[4],v[1]),max(v[1],v[2]))
+                v = v * vv * vv * 0.06 + v + c
             end
             ypos += step
         end
@@ -243,34 +240,23 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=2.2
-    center=(-0.36, 0.0, 0.0, 0.0)
-    angle=normalize((1.0, 0.0, 0.0, 1.3))
-    angleDeltaList=(
-    normalize(inv((70.0,0.0,1.0,1.0))),
-    normalize(inv((70.0,0.0,1.0,-1.0))),
-    normalize(inv((70.0,0.0,-1.0,1.0))),
-    normalize(inv((70.0,0.0,-1.0,-1.0))),
-    normalize(inv((70.0,1.0,0.0,-1.0))),
-    normalize(inv((70.0,1.0,0.0,1.0))),
-    normalize(inv((70.0,1.0,-1.0,0.0))),
-    normalize(inv((70.0,1.0,1.0,0.0))),
-    normalize(inv((70.0,-1.0,1.0,0.0))),
-    normalize(inv((70.0,-1.0,-1.0,0.0))),
-    normalize(inv((70.0,-1.0,0.0,1.0))),
-    normalize(inv((70.0,-1.0,0.0,-1.0)))
-    )
-    angleDelta=angleDeltaList[1]
+    radius=11.0
+    center=(0.0, 0.0, 0.0, 0.0)
+    angle=(1.0,0.0,0.4,0.5)
+    local angleDelta
     for iii in 1:700
         fn="xx_$(iii).png"
         if iii % 100 == 1
-            angleDelta=angleDeltaList[1 + abs(rand(Int64)) % length(angleDeltaList)]
+            angleDelta=normalize((90.0,
+                                  rand(Float64)*5.0-3.5,
+                                  rand(Float64)*5.0-3.5,
+                                  rand(Float64)*5.0-3.5))
         end
         println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=8,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
-        radius=radius*0.9968
+        mydraw(fn,center, radius, 200.0, 1000,colorScheme=11,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
+        radius=radius*0.9984
         angle = angle*angleDelta
-        center += (0.0001,0.0,0.0,0.0)
+        #center -= (0.002,0.0,0.0,0.0)
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4

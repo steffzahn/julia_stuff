@@ -1,3 +1,7 @@
+corner
+                vv = (max(v[2],v[3]),max(v[3],v[4]),max(v[4],v[1]),max(v[1],v[2]))
+                v = v * vv * vv * 0.06 + v + c
+
 mushrooms
                 v = 0.3 * v*v + w + c
                 w = 0.1 * w * w * w - 0.03 * w * w - 0.5 * vtemp * vtemp + vtemp + c
@@ -161,7 +165,7 @@ bubbles @time mydraw("xx.png",(-0.01, 0.1, 0.0, 0.0), 0.05, 1000.0, 4000,colorSc
                 t=w-vinv
                 w = t * t * t * t * (1.0/5531.0) + vtemp + c
 
-snap @time mydraw("xx.png",(-0.75, 0.0, 0.0, 0.0), 0.227, 1000.0, 5300,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8)
+snap @time mydraw("xx.png",(-0.75, 0.0, 0.0, 0.0), 0.227, 1000.0, 5300,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=8,discrete=true)
                 vtemp = v
                 vinv = inv(v)
                 if isnan(vinv)
