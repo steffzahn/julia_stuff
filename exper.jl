@@ -210,8 +210,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vv = (max(v[2],v[3]),max(v[3],v[4]),max(v[4],v[1]),max(v[1],v[2]))
-                v = v * vv * vv * 0.06 + v + c
+                vv = (5.0*v[2]*v[3]-v[4],11.0*v[3]*v[4]-v[1],23.0*v[4]*v[1]-v[2],37.0*v[1]*v[2]-v[3])
+                v = v * vv *0.005 + v + c
             end
             ypos += step
         end
@@ -240,9 +240,9 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=11.0
+    radius=5.0
     center=(0.0, 0.0, 0.0, 0.0)
-    angle=(1.0,0.0,0.4,0.5)
+    angle=(1.0,0.0,0.0,0.0)
     local angleDelta
     for iii in 1:700
         fn="xx_$(iii).png"
@@ -254,11 +254,15 @@ function myvideosequence()
         end
         println(iii," ",radius, " ", angleDelta)
         mydraw(fn,center, radius, 200.0, 1000,colorScheme=11,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
-        radius=radius*0.9984
+        radius=radius*0.997
         angle = angle*angleDelta
-        #center -= (0.002,0.0,0.0,0.0)
+        center -= (0.002,0.0,0.0,0.0)
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
-    #  xffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 2 -vf scale=600:600 -b:a 128k output.mp4
+    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 2 -vf scale=600:600 -b:a 128k output.mp4
+
+    #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 6000k -pass 1 -vf scale=600:600 -c:a libopus -b:a 128k output.webm
+    #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 6000k -pass 2 -vf scale=600:600 -c:a libopus -b:a 128k output.webm
+
 end

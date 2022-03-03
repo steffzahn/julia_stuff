@@ -434,8 +434,12 @@ video: onevect=(1.0,0.0,0.0,0.0)
        mydraw(fn,(-0.22743,-0.9737,0.2,-1.5), 0.002, 1000.0, 1000,turnIt=onevect+3.0*(1.0-(iii+100)/400.0)*basevect)
        end
        ffmpeg -i xx_%d.png -framerate 35 ../shared/test.avi
+mp4:
        ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
        ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 2 -vf scale=600:600 -b:a 128k output.mp4
+webm:
+       ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 6000k -pass 1 -vf scale=600:600 -c:a libopus -b:a 128k output.webm
+       ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 6000k -pass 2 -vf scale=600:600 -c:a libopus -b:a 128k output.webm
 
 
 flow: @time mydraw("xx.png",(-0.22743,-0.9737,0.2,-1.5), 0.002, 1000.0, 5900)
