@@ -178,7 +178,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                  colorFactor::Int64=1,
                  colorOffset::Int64=0,
                  colorRepetitions::Int64=1,
-                 discrete::Bool=false)::Matrix{RGB}
+                 discrete::Bool=false,
+                 additionalParameter::Float64=0.0)::Matrix{RGB}
     image=Matrix{RGB}(UndefInitializer(),size,size)
     step = radius*2.0/convert(Float64,size)
     (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
@@ -186,6 +187,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     turnItNorm=normalize(turnIt)
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
+    vadd=(additionalParameter-350.0)*0.15
     for i in 1:size
         ypos = y-radius
         for j in 1:size
@@ -210,8 +212,17 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vv = (5.0*v[2]*v[3]-v[4],11.0*v[3]*v[4]-v[1],23.0*v[4]*v[1]-v[2],37.0*v[1]*v[2]-v[3])
-                v = v * vv *0.005 + v + c
+                vtemp = v
+                vinv=inv(v)
+                if isnan(vinv)
+                    vinv=zero(v)
+                end
+                winv=inv(w)
+                if isnan(winv)
+                    winv=zero(w)
+                end
+                v = v * v * 0.07 + vinv * vinv + w + c
+                w = w * w * 0.1 + winv * winv * winv - vinv * vadd + vtemp + c
             end
             ypos += step
         end
@@ -228,35 +239,39 @@ function mydraw(fn::String,
                 colorFactor::Int64=1,
                 colorOffset::Int64=0,
                 colorRepetitions::Int64=1,
-                discrete::Bool=false)
+                discrete::Bool=false,
+                additionalParameter::Float64=0.0)
     image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
                   colorOffset=colorOffset,
                   colorRepetitions=colorRepetitions,
-                  discrete=discrete)
+                  discrete=discrete,
+                  additionalParameter=additionalParameter)
     save(fn,image)
 end
 
 function myvideosequence()
     radius=5.0
-    center=(0.0, 0.0, 0.0, 0.0)
+    center=(-3.3, 0.0, 0.0, 0.0)
     angle=(1.0,0.0,0.0,0.0)
     local angleDelta
     for iii in 1:700
         fn="xx_$(iii).png"
         if iii % 100 == 1
             angleDelta=normalize((90.0,
-                                  rand(Float64)*5.0-3.5,
-                                  rand(Float64)*5.0-3.5,
-                                  rand(Float64)*5.0-3.5))
+                                  rand(Float64)*1.0-0.5,
+                                  rand(Float64)*2.0-0.5,
+                                  rand(Float64)*2.0-0.5))
         end
         println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 200.0, 1000,colorScheme=11,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=angle)
-        radius=radius*0.997
-        angle = angle*angleDelta
-        center -= (0.002,0.0,0.0,0.0)
+        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=7,
+               colorFactor=1,colorOffset=70,colorRepetitions=1,
+               turnIt=angle,additionalParameter=convert(Float64,iii))
+        #radius=radius*1.004
+        #angle = angle*angleDelta
+        #center -= (0.09,0.0,0.0,0.0)
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
