@@ -1,3 +1,12 @@
+mordor
+    z1=-1.0
+    z700=3.0
+    b=(z700-z1)/699.0
+    a=z1-b
+    vadd=a+b*additionalParameter
+.....
+    vv = (v[2]+42.0*vadd*v[4],abs(v[1]),-v[3]+0.1,-v[4]-0.2)
+    v = v * vv * 0.07 + v + c
 sailing
     vadd=(additionalParameter-350.0)*0.15
 .....

@@ -187,14 +187,19 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     turnItNorm=normalize(turnIt)
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
-    vadd=(additionalParameter-350.0)*0.15
+    z1=-1.0
+    z700=3.0
+    # a+b=z1, a+700.0*b=z700,
+    b=(z700-z1)/699.0
+    a=z1-b
+    # vadd=additionalParameter
+    vadd=a+b*additionalParameter
     for i in 1:size
         ypos = y-radius
         for j in 1:size
             n=1
             c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
-            w=zero(c)
             while true
                 currentNorm=norm(v)
                 if currentNorm>=limit
@@ -213,16 +218,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                vinv=inv(v)
-                if isnan(vinv)
-                    vinv=zero(v)
-                end
-                winv=inv(w)
-                if isnan(winv)
-                    winv=zero(w)
-                end
-                v = v * v * 0.07 + vinv * vinv + w + c
-                w = w * w * 0.1 + winv * winv * winv - vinv * vadd + vtemp + c
+                vv = (v[2]+42.0*vadd*v[4],abs(v[1]),-v[3]+0.1,-v[4]-0.2)
+                v = v * vv * 0.07 + v + c
             end
             ypos += step
         end
@@ -253,8 +250,8 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=5.0
-    center=(-3.3, 0.0, 0.0, 0.0)
+    radius=23.0
+    center=(-8.0, -17.0, 0.0, 0.0)
     angle=(1.0,0.0,0.0,0.0)
     local angleDelta
     for iii in 1:700
@@ -266,7 +263,7 @@ function myvideosequence()
                                   rand(Float64)*2.0-0.5))
         end
         println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=7,
+        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=1,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                turnIt=angle,additionalParameter=convert(Float64,iii))
         #radius=radius*1.004
