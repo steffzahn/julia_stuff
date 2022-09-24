@@ -187,8 +187,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     turnItNorm=normalize(turnIt)
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
-    z1=-1.0
-    z700=3.0
+    z1=0.45
+    z700=0.0
     # a+b=z1, a+700.0*b=z700,
     b=(z700-z1)/699.0
     a=z1-b
@@ -218,8 +218,23 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
                 vtemp = v
-                vv = (v[2]+42.0*vadd*v[4],abs(v[1]),-v[3]+0.1,-v[4]-0.2)
-                v = v * vv * 0.07 + v + c
+                vv = v * v
+                vvv = vv * v
+                vvvv = vv * vv
+                vvvvvv = vv * vvvv
+                v = v - vv * (1.0/2.0) + vvv * (1.0/3.0) - vvvv * ((1.0+vadd)/4.0) +
+                    v * vvvv * (1.0/5.0) - vvvvvv * (1.0/6.0) +
+                    v * vvvvvv * (1.0/7.0) - vv * vvvvvv * (1.0/8.0) + c
+                vv = v * v
+                vvv = vv * v
+                vvvv = vv * vv
+                vvvvvv = vv * vvvv
+               
+                v = v + vvv * (1.0/6.0) +
+                    vv * vvv * (1.0/120.0) +
+                    vvv * vvvv * (1.0/5040.0) +
+                    vvv * vvvvvv * (1.0/362880.0) + c
+                vold = vtemp
             end
             ypos += step
         end
@@ -250,10 +265,11 @@ function mydraw(fn::String,
 end
 
 function myvideosequence()
-    radius=23.0
-    center=(-8.0, -17.0, 0.0, 0.0)
+    radius=0.002
+    center=(2.021, 4.919, 0.0, 0.0)
     angle=(1.0,0.0,0.0,0.0)
     local angleDelta
+    angleDelta=zero(angle)
     for iii in 1:700
         fn="xx_$(iii).png"
         if iii % 100 == 1
@@ -263,8 +279,9 @@ function myvideosequence()
                                   rand(Float64)*2.0-0.5))
         end
         println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=1,
-               colorFactor=1,colorOffset=70,colorRepetitions=1,
+        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=0,
+               colorFactor=5,colorOffset=90,colorRepetitions=1,
+               discrete=true,
                turnIt=angle,additionalParameter=convert(Float64,iii))
         #radius=radius*1.004
         #angle = angle*angleDelta
