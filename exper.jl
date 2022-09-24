@@ -187,6 +187,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     turnItNorm=normalize(turnIt)
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
+    o = one(turnIt)
     z1=0.45
     z700=0.0
     # a+b=z1, a+700.0*b=z700,
@@ -217,24 +218,15 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                     break
                 end
                 n += 1
-                vtemp = v
-                vv = v * v
-                vvv = vv * v
-                vvvv = vv * vv
-                vvvvvv = vv * vvvv
-                v = v - vv * (1.0/2.0) + vvv * (1.0/3.0) - vvvv * ((1.0+vadd)/4.0) +
-                    v * vvvv * (1.0/5.0) - vvvvvv * (1.0/6.0) +
-                    v * vvvvvv * (1.0/7.0) - vv * vvvvvv * (1.0/8.0) + c
-                vv = v * v
-                vvv = vv * v
-                vvvv = vv * vv
-                vvvvvv = vv * vvvv
+
+                t = v - o
+                tt = t * t
+                ttt = tt * t
+                tttt = tt * tt
+
+                v = v * v * (o + t * (1/2) - tt * (1/8) +
+                         ttt * (1/16) - tttt * (5/128)) + c
                
-                v = v + vvv * (1.0/6.0) +
-                    vv * vvv * (1.0/120.0) +
-                    vvv * vvvv * (1.0/5040.0) +
-                    vvv * vvvvvv * (1.0/362880.0) + c
-                vold = vtemp
             end
             ypos += step
         end

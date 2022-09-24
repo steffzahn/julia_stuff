@@ -1,3 +1,18 @@
+bubble tea
+ @time mydraw("xx.png",(1.04, 2.69, 0.0, 0.0), 0.14, 1000.0, 12500,colorScheme=11,colorFactor=1,colorOffset=90,discrete=false,colorRepetitions=1)
+
+    o = one(turnIt)
+......
+                t = v - o
+                tt = t * t
+                ttt = tt * t
+                tttt = tt * tt
+                v = v * v * (o + t * (1/2) - tt * (1/8) +
+                         ttt * (1/16) - tttt * (5/128)) + c
+                
+
+
+
 spider farm
     z1=0.45
     z700=0.0
