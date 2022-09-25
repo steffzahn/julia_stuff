@@ -9,6 +9,7 @@ import Base.iszero
 import Base.one
 import Base.inv
 import Base.isnan
+import Base.isinf
 using Images
 using ColorTypes
 
@@ -82,6 +83,11 @@ end
 function isnan((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
                )::Bool
     return isnan(x1) || isnan(x2) || isnan(x3) || isnan(x4) 
+end
+
+function isinf((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+               )::Bool
+    return isinf(x1) || isinf(x2) || isinf(x3) || isinf(x4) 
 end
 
 function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
