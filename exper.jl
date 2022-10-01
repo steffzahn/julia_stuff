@@ -194,21 +194,22 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
     o = one(turnIt)
-    z1=0.45
-    z700=0.0
+    #z1=0.45
+    #z700=0.0
     # a+b=z1, a+700.0*b=z700,
-    b=(z700-z1)/699.0
-    a=z1-b
+    #b=(z700-z1)/699.0
+    #a=z1-b
     # vadd=additionalParameter
-    vadd=a+b*additionalParameter
+    #vadd=a+b*additionalParameter
     for i in 1:size
         ypos = y-radius
         for j in 1:size
             n=1
             c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
+            w=zero(c)
             while true
-                currentNorm=norm(v)
+                currentNorm=norm(v+w)
                 if currentNorm>=limit
                     if discrete
                       image[i,j] = colors[colorOffset+n*colorFactor]
@@ -225,14 +226,10 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
 
-                t = v - o
-                tt = t * t
-                ttt = tt * t
-                tttt = tt * tt
+                vtemp = v
+                v = v * v * (1.0/73.0) + w * (0.45,-0.88,-0.85,0.05) + c
+                w = w * w * w * vtemp * (-0.012,-0.042,0.03,-0.02) - vtemp + c
 
-                v = v * v * (o + t * (1/2) - tt * (1/8) +
-                         ttt * (1/16) - tttt * (5/128)) + c
-               
             end
             ypos += step
         end
