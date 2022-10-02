@@ -283,10 +283,10 @@ function myvideosequence()
         #center -= (0.09,0.0,0.0,0.0)
     end
 
-    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 1 -vf scale=600:600 -b:a 128k output.mp4
-    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 6000k -pass 2 -vf scale=600:600 -b:a 128k output.mp4
+    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
+    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 2 -vf scale=720:720 -b:a 128k output.mp4
 
-    #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 6000k -pass 1 -vf scale=600:600 -c:a libopus -b:a 128k output.webm
-    #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 6000k -pass 2 -vf scale=600:600 -c:a libopus -b:a 128k output.webm
+    #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 30000k -pass 1 -vf scale=720:720 -c:a libopus -b:a 128k output.webm
+    #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 30000k -pass 2 -vf scale=720:720 -c:a libopus -b:a 128k output.webm
 
 end
