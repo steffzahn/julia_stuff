@@ -1,3 +1,7 @@
+fading
+                vv = (v[2]-v[3]*v[4],v[3]+0.3*v[4],-2.7*v[4]-v[1],v[1]+v[2])
+                v = vv * vv * 3.6 + v + c
+@time mydraw("xx.png",(-0.1, 0.15, 0.0, 0.0), 0.4, 1000.0, 5000,colorScheme=11,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0, 0.0, 0.0, 0.0),discrete=false,additionalParameter=0.0)
 paris can wait
                 v = v - (1/6)*v*v*v +
                     (1/120) *v*v*v*v*v -

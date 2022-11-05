@@ -12,6 +12,7 @@ import Base.isnan
 import Base.isinf
 using Images
 using ColorTypes
+using Match
 
 function zero(a::Tuple{Float64, Float64, Float64, Float64}
               )::Tuple{Float64, Float64, Float64, Float64}
@@ -194,8 +195,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
     o = one(turnIt)
-    #z1=-0.15
-    #z700=0.25
+    #z1=0.2
+    #z700=0.03
     # a+b=z1, a+700.0*b=z700,
     #b=(z700-z1)/699.0
     #a=z1-b
@@ -207,9 +208,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
             n=1
             c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
-            w=zero(c)
             while true
-                currentNorm=norm(v+w)
+                currentNorm=norm(v)
                 if currentNorm>=limit
                     if discrete
                       image[i,j] = colors[colorOffset+n*colorFactor]
@@ -226,14 +226,8 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
 
-                vtemp = v
-                v = v - (1/6)*v*v*v +
-                    (1/120) *v*v*v*v*v -
-                    (1/5040) *v*v*v*v*v*v*v +
-                    (1/362880) *v*v*v*v*v*v*v*v*v -
-                    (1/39916800) *v*v*v*v*v*v*v*v*v*v*v + c
-                w = (-0.17) * w * w * vtemp - (1.5) * vtemp + c
-
+                vv = (v[2]-v[3]*v[4],v[3]+0.3*v[4],-2.7*v[4]-v[1],v[1]+v[2])
+                v = vv * vv * 3.6 + v + c
             end
             ypos += step
         end
@@ -263,32 +257,42 @@ function mydraw(fn::String,
     save(fn,image)
 end
 
+function randomTurn() ::Tuple{Float64, Float64, Float64, Float64}
+    @match trunc(Int64,rand(Float64)*2.0) begin
+        0 => return (66.0,rand(Float64)-0.5,rand(Float64)-0.5,rand(Float64)-0.5)
+        1 => return (rand(Float64)-0.5,66.0,rand(Float64)-0.5,rand(Float64)-0.5)
+        2 => return (rand(Float64)-0.5,rand(Float64)-0.5,66.0,rand(Float64)-0.5)
+        _ => return (rand(Float64)-0.5,rand(Float64)-0.5,rand(Float64)-0.5,66.0)
+    end
+end
+
 function myvideosequence()
-    radius=2.0
-    center=(0.0, 0.0, 0.0, 0.0)
-    angle=(1.0,0.0,0.0,0.0)
+    radius=55.0
+    center=(-360.0,0.0,0.0,0.0)
+    #centerDelta = ((-4.5,0.5,0.0,0.0)-center)*(1/700)
+    angle=(1.0,0.0,0.4,0.6)
     local angleDelta
     angleDelta=zero(angle)
     for iii in 1:700
         fn="xx_$(iii).png"
-        if iii % 100 == 1
-            angleDelta=normalize((66.0,
-                                  1.0,
-                                  1.0,
-                                  1.0))
-        end
+        #if iii % 100 == 1
+        #    angleDelta=normalize(randomTurn())
+        #end
         println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 1000.0, 1000,colorScheme=11,
-               colorFactor=1,colorOffset=90,colorRepetitions=1,
+        mydraw(fn,center, radius, 120.0, 1620,colorScheme=0,
+               colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,additionalParameter=convert(Float64,iii))
-        radius=radius*0.9975
-        angle = angle*angleDelta
-        #center -= (0.09,0.0,0.0,0.0)
+        radius=radius*0.97
+        #angle = angle*angleDelta
+        #center +=centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 2 -vf scale=720:720 -b:a 128k output.mp4
+
+    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=1080:1080 -b:a 128k output.mp4
+    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 2 -vf scale=1080:1080 -b:a 128k output.mp4
 
     #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 30000k -pass 1 -vf scale=720:720 -c:a libopus -b:a 128k output.webm
     #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 30000k -pass 2 -vf scale=720:720 -c:a libopus -b:a 128k output.webm
