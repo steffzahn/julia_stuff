@@ -227,7 +227,7 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 n += 1
 
                 vv = (v[2]-v[3]*v[4],v[3]+0.3*v[4],-2.7*v[4]-v[1],v[1]+v[2])
-                v = vv * vv * 3.6 + v + c
+                v = vv * v * 7.6 - 0.027 * vv * vv * v + v * v + v + c
             end
             ypos += step
         end
@@ -257,34 +257,26 @@ function mydraw(fn::String,
     save(fn,image)
 end
 
-function randomTurn() ::Tuple{Float64, Float64, Float64, Float64}
-    @match trunc(Int64,rand(Float64)*2.0) begin
-        0 => return (66.0,rand(Float64)-0.5,rand(Float64)-0.5,rand(Float64)-0.5)
-        1 => return (rand(Float64)-0.5,66.0,rand(Float64)-0.5,rand(Float64)-0.5)
-        2 => return (rand(Float64)-0.5,rand(Float64)-0.5,66.0,rand(Float64)-0.5)
-        _ => return (rand(Float64)-0.5,rand(Float64)-0.5,rand(Float64)-0.5,66.0)
-    end
-end
-
 function myvideosequence()
-    radius=55.0
-    center=(-360.0,0.0,0.0,0.0)
+    Random.seed!(8273262)
+    radius=2.4
+    center=(0.0, 0.0, 0.0, 0.0)
     #centerDelta = ((-4.5,0.5,0.0,0.0)-center)*(1/700)
-    angle=(1.0,0.0,0.4,0.6)
+    angle=(1.0,0.0,0.0,0.0)
     local angleDelta
     angleDelta=zero(angle)
     for iii in 1:700
         fn="xx_$(iii).png"
-        #if iii % 100 == 1
-        #    angleDelta=normalize(randomTurn())
-        #end
+        if iii % 100 == 1
+            angleDelta=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
+        end
         println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 120.0, 1620,colorScheme=0,
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=11,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,additionalParameter=convert(Float64,iii))
-        radius=radius*0.97
-        #angle = angle*angleDelta
+        radius=radius*0.9945
+        angle = angle*angleDelta
         #center +=centerDelta
     end
 
