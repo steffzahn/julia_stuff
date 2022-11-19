@@ -10,10 +10,19 @@ import Base.one
 import Base.inv
 import Base.isnan
 import Base.isinf
+import Random
 using Images
 using ColorTypes
 using Match
 
+function setindex((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
+                   v::Float64, index::Int64
+                   )::Tuple{Float64, Float64, Float64, Float64}
+    index==1 && return (v,x2,x3,x4)
+    index==2 && return (x1,v,x3,x4)
+    index==3 && return (x1,x2,v,x4)
+    return (x1,x2,x3,v)
+end
 function zero(a::Tuple{Float64, Float64, Float64, Float64}
               )::Tuple{Float64, Float64, Float64, Float64}
     return (0.0,0.0,0.0,0.0)
@@ -195,21 +204,22 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
     xpos = x-radius
     colorLimit=div(colorsteps-colorOffset,colorFactor)
     o = one(turnIt)
-    #z1=0.2
-    #z700=0.03
+    z1=-1.0
+    z700=1.5
     # a+b=z1, a+700.0*b=z700,
-    #b=(z700-z1)/699.0
-    #a=z1-b
-    vadd=additionalParameter
-    #vadd=a+b*additionalParameter
+    b=(z700-z1)/699.0
+    a=z1-b
+    # vadd=additionalParameter
+    vadd=a+b*additionalParameter
     for i in 1:size
         ypos = y-radius
         for j in 1:size
             n=1
             c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
             v=zero(c)
+            w=zero(c)
             while true
-                currentNorm=norm(v)
+                currentNorm=norm(v+w)
                 if currentNorm>=limit
                     if discrete
                       image[i,j] = colors[colorOffset+n*colorFactor]
@@ -226,8 +236,18 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
 
-                vv = (v[2]-v[3]*v[4],v[3]+0.3*v[4],-2.7*v[4]-v[1],v[1]+v[2])
-                v = vv * v * 7.6 - 0.027 * vv * vv * v + v * v + v + c
+                vtemp = v
+                vinv=inv(v)
+                if isnan(vinv)
+                    vinv=zero(v)
+                end
+                winv=inv(w)
+                if isnan(winv)
+                    winv=zero(w)
+                end
+                v = 0.0553 * v * v + 0.2 * vinv * vinv + vadd * w + c
+                w = w * w * 0.1 + 0.0883 * winv + vtemp + c
+
             end
             ypos += step
         end
@@ -259,24 +279,24 @@ end
 
 function myvideosequence()
     Random.seed!(8273262)
-    radius=2.4
-    center=(0.0, 0.0, 0.0, 0.0)
+    radius=8.2
+    center=(-4.5, 0.0, 0.0, 0.0)
     #centerDelta = ((-4.5,0.5,0.0,0.0)-center)*(1/700)
     angle=(1.0,0.0,0.0,0.0)
     local angleDelta
     angleDelta=zero(angle)
     for iii in 1:700
         fn="xx_$(iii).png"
-        if iii % 100 == 1
-            angleDelta=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
-        end
+        #if iii % 100 == 1
+        #    angleDelta=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
+        #end
         println(iii," ",radius, " ", angleDelta)
         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=11,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,additionalParameter=convert(Float64,iii))
-        radius=radius*0.9945
-        angle = angle*angleDelta
+        #radius=radius*0.9945
+        #angle = angle*angleDelta
         #center +=centerDelta
     end
 
