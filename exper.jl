@@ -127,11 +127,8 @@ end
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
-    colorSet=0
-    if colorScheme>=6
-        colorSet=1
-        colorScheme -= 6
-    end
+    colorSet=div(colorScheme,6)
+    colorScheme -= 6*colorSet
     colorstepsOneColor=256
     colorsteps=6*colorRepetitions*colorstepsOneColor
     gray = 1.0/convert(Float64,colorstepsOneColor)
@@ -145,10 +142,14 @@ function initPalette(;colorScheme::Int64=0,
             baseColor1=RGB(scaledGray,0.0,0.7*scaledGray)
             baseColor2=RGB(0.0,scaledGray,0.8*scaledGray)
             baseColor3=RGB(0.4*scaledGray,0.0,scaledGray)
-        else
+        elseif colorSet == 1
             baseColor1=RGB(scaledGray,0.0,0.4*scaledGray)
             baseColor2=RGB(0.635294*scaledGray,scaledGray,0.0)
             baseColor3=RGB(0.0,0.815686*scaledGray,scaledGray)
+        else
+            baseColor1=RGB(0.2588*scaledGray,0.494*scaledGray,scaledGray)
+            baseColor2=RGB(scaledGray,0.2588*scaledGray,0.8274*scaledGray)
+            baseColor3=RGB(0.2588*scaledGray,scaledGray,0.902*scaledGray)
         end
         if colorScheme == 1
             color1=baseColor3
