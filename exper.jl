@@ -15,110 +15,110 @@ using Images
 using ColorTypes
 using Match
 
-function setindex((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
-                   v::Float64, index::Int64
-                   )::Tuple{Float64, Float64, Float64, Float64}
+function setindex((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+                   v::AbstractFloat, index::Int64
+                   )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     index==1 && return (v,x2,x3,x4)
     index==2 && return (x1,v,x3,x4)
     index==3 && return (x1,x2,v,x4)
     return (x1,x2,x3,v)
 end
-function zero(a::Tuple{Float64, Float64, Float64, Float64}
-              )::Tuple{Float64, Float64, Float64, Float64}
+function zero(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+              )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (0.0,0.0,0.0,0.0)
 end
-function iszero((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+function iszero((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
               )::Bool
     return x1==0.0 && x2==0.0 && x3==0.0 && x4==0.0
 end
 
-function one((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
-             )::Tuple{Float64, Float64, Float64, Float64}
+function one((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+             )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (1.0,0.0,0.0,0.0)
 end
 
-function +((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
-           (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function +((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (x1+y1,x2+y2,x3+y3,x4+y4)
 end
 
-function -((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
-           (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function -((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (x1-y1,x2-y2,x3-y3, x4-y4)
 end
-function -((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function -((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (-x1,-x2,-x3,-x4)
 end
 
-function *((x1,x2,x3, x4)::Tuple{Float64, Float64, Float64, Float64}, y::Float64
-           )::Tuple{Float64, Float64, Float64, Float64}
+function *((x1,x2,x3, x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}, y::AbstractFloat
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (x1*y,x2*y,x3*y,x4*y)
 end
-function *(y::Float64, (x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function *(y::AbstractFloat, (x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (x1*y,x2*y,x3*y,x4*y)
 end
 
 # \cdot tab
-function ⋅((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
-          (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64})::Float64
+function ⋅((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+          (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat})::AbstractFloat
     return x1*y1+x2*y2+x3*y3+x4*y4
 end
 
-function norm(x::Tuple{Float64, Float64, Float64, Float64})::Float64
+function norm(x::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat})::AbstractFloat
     return sqrt(x ⋅ x)
 end
-function normalize(a::Tuple{Float64, Float64, Float64, Float64}
-                   )::Tuple{Float64, Float64, Float64, Float64}
-    n=norm(a)
+function normalize(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+                   )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+    local n=norm(a)
     if n==0.0
         return a
     end
     return (1.0/n)*a
 end
 
-function conj((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
-             )::Tuple{Float64, Float64, Float64, Float64}
+function conj((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+             )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (x1,-x2,-x3,-x4)
 end
 
-function inv((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
-             )::Tuple{Float64, Float64, Float64, Float64}
+function inv((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+             )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (1.0/(x1*x1+x2*x2+x3*x3+x4*x4))*(x1,-x2,-x3,-x4)
 end
 
-function isnan((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+function isnan((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
                )::Bool
     return isnan(x1) || isnan(x2) || isnan(x3) || isnan(x4) 
 end
 
-function isinf((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64}
+function isinf((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
                )::Bool
     return isinf(x1) || isinf(x2) || isinf(x3) || isinf(x4) 
 end
 
-function *((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
-           (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function *((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return (x1*y1-x2*y2-x3*y3-x4*y4,
             x2*y1+x1*y2+x3*y4-x4*y3,
             x3*y1+x1*y3-x2*y4+x4*y2,
             x1*y4+x4*y1+x2*y3-x3*y2)
 end
 
-function /(a::Tuple{Float64, Float64, Float64, Float64},
-           b::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function /(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+           b::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
     return a*inv(b)
 end
 
 # wrong multiplication
-function funnyMultiply((x1,x2,x3,x4)::Tuple{Float64, Float64, Float64, Float64},
-           (y1,y2,y3,y4)::Tuple{Float64, Float64, Float64, Float64}
-           )::Tuple{Float64, Float64, Float64, Float64}
+function funnyMultiply((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
      return (x1*y1-x2*y2-x3*y3-x4*y4,
              x2*y1+x1*y2+x3*y4+x4*y3,
              x3*y1+x1*y3+x2*y4+x4*y2,
@@ -127,17 +127,20 @@ end
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
-    colorSet=div(colorScheme,6)
+    local colorSet=div(colorScheme,6)
     colorScheme -= 6*colorSet
-    colorstepsOneColor=256
-    colorsteps=6*colorRepetitions*colorstepsOneColor
-    gray = 1.0/convert(Float64,colorstepsOneColor)
-    colors=Array{RGB}(UndefInitializer(),colorsteps)
+    local colorstepsOneColor=256
+    local colorsteps=6*colorRepetitions*colorstepsOneColor
+    local gray = 1.0/convert(Float64,colorstepsOneColor)
+    local colors=Array{RGB}(UndefInitializer(),colorsteps)
     for ii in 1:colorstepsOneColor
-        scaledGray=gray*ii
-        baseColor1=RGB(0.0,0.0,0.0)
-        baseColor2=baseColor1
-        baseColor3=baseColor1
+        local scaledGray=gray*ii
+        local baseColor1=RGB(0.0,0.0,0.0)
+        local baseColor2=baseColor1
+        local baseColor3=baseColor1
+        local color1
+        local color2
+        local color3
         if colorSet == 0
             baseColor1=RGB(scaledGray,0.0,0.7*scaledGray)
             baseColor2=RGB(0.0,scaledGray,0.8*scaledGray)
@@ -188,45 +191,47 @@ function initPalette(;colorScheme::Int64=0,
     return (colors,colorsteps)
 end
 
-function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
-                 radius::Float64,limit::Float64,size::Int64;
-                 turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
+function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+                 radius::AbstractFloat,limit::AbstractFloat,size::Int64;
+                 turnIt::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}=(1.0,0.0,0.0,0.0),
                  colorScheme::Int64=0,
                  colorFactor::Int64=1,
                  colorOffset::Int64=0,
                  colorRepetitions::Int64=1,
                  discrete::Bool=false,
-                 additionalParameter::Float64=0.0)::Matrix{RGB}
-    image=Matrix{RGB}(UndefInitializer(),size,size)
-    step = radius*2.0/convert(Float64,size)
-    (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
-    black=RGB(0.0,0.0,0.0)
-    turnItNorm=normalize(turnIt)
-    xpos = x-radius
-    colorLimit=div(colorsteps-colorOffset,colorFactor)
-    o = one(turnIt)
-    z1=-1.0
-    z700=1.5
+                 additionalParameter::AbstractFloat=0.0)::Matrix{RGB}
+    # println("PREC=",precision(x))
+    local image=Matrix{RGB}(UndefInitializer(),size,size)
+    local step = radius*2.0/convert(Float64,size)
+    local (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
+    local black=RGB(0.0,0.0,0.0)
+    local turnItNorm=normalize(turnIt)
+    local xpos = x-radius
+    local colorLimit=div(colorsteps-colorOffset,colorFactor)
+    local o = one(turnIt)
+    local z1=0.08
+    local z700=0.00000002
     # a+b=z1, a+700.0*b=z700,
-    b=(z700-z1)/699.0
-    a=z1-b
-    # vadd=additionalParameter
-    vadd=a+b*additionalParameter
+    local b=(z700-z1)/699.0
+    local a=z1-b
+    local vadd=additionalParameter
+    #local vadd=a+b*additionalParameter
     for i in 1:size
-        ypos = y-radius
+        #println("ROW=",i)
+        local ypos = y-radius
         for j in 1:size
-            n=1
-            c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
-            v=zero(c)
-            w=zero(c)
+            local n=1
+            local c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
+            local v=zero(c)
+            local w=zero(c)
             while true
-                currentNorm=norm(v+w)
+                local currentNorm=norm(v+w)
                 if currentNorm>=limit
                     if discrete
                       image[i,j] = colors[colorOffset+n*colorFactor]
                     else
-                        n1 = (n - 1) * sqrt(n - 1)
-                        value=1+convert(Int64,trunc((((1 + n1) * limit * (colorLimit-1))/(currentNorm+n1*limit))))
+                        local n1 = (n - 1) * sqrt(n - 1)
+                        local value=1+convert(Int64,trunc((((1 + n1) * limit * (colorLimit-1))/(currentNorm+n1*limit))))
                         image[i,j] = colors[colorOffset+value*colorFactor]
                     end
                     break
@@ -237,18 +242,9 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
                 end
                 n += 1
 
-                vtemp = v
-                vinv=inv(v)
-                if isnan(vinv)
-                    vinv=zero(v)
-                end
-                winv=inv(w)
-                if isnan(winv)
-                    winv=zero(w)
-                end
-                v = 0.0553 * v * v + 0.2 * vinv * vinv + vadd * w + c
-                w = w * w * 0.1 + 0.0883 * winv + vtemp + c
-
+                local vtemp = v
+                v = v * v * (1.0/73.0) + w + c
+                w = vadd * w * vtemp - w * w * w - vtemp + c
             end
             ypos += step
         end
@@ -258,16 +254,16 @@ function myimage((x,y,z,u)::Tuple{Float64, Float64, Float64, Float64},
 end
 
 function mydraw(fn::String,
-                a::Tuple{Float64, Float64, Float64, Float64},
-                radius::Float64,limit::Float64,size::Int64;
-                turnIt::Tuple{Float64, Float64, Float64, Float64}=(1.0,0.0,0.0,0.0),
+                a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
+                radius::AbstractFloat,limit::AbstractFloat,size::Int64;
+                turnIt::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}=(1.0,0.0,0.0,0.0),
                 colorScheme::Int64=0,
                 colorFactor::Int64=1,
                 colorOffset::Int64=0,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
-                additionalParameter::Float64=0.0)
-    image=myimage(a,radius,limit,size,
+                additionalParameter::AbstractFloat=0.0)
+    local image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
@@ -280,25 +276,25 @@ end
 
 function myvideosequence()
     Random.seed!(8273262)
-    radius=8.2
-    center=(-4.5, 0.0, 0.0, 0.0)
-    #centerDelta = ((-4.5,0.5,0.0,0.0)-center)*(1/700)
-    angle=(1.0,0.0,0.0,0.0)
-    local angleDelta
-    angleDelta=zero(angle)
+    local radius=20.8
+    local center=(0.0, 0.0, 0.0, 0.0)
+    local centerDelta = ((-70.0,0.0,0.0,0.0)-center)*(1.0/700)
+    local angle=(1.0,0.0,0.0,0.0)
+    #local angleDelta=zero(angle)
+    #local radiusDelta=(100.0-radius)*(1.0/700)
     for iii in 1:700
-        fn="xx_$(iii).png"
+        local fn="xx_$(iii).png"
         #if iii % 100 == 1
         #    angleDelta=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
         #end
-        println(iii," ",radius, " ", angleDelta)
-        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=11,
-               colorFactor=1,colorOffset=70,colorRepetitions=1,
+        println(iii," ",radius, " ", center)
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=16,
+               colorFactor=1,colorOffset=70,colorRepetitions=5,
                discrete=false,
                turnIt=angle,additionalParameter=convert(Float64,iii))
-        #radius=radius*0.9945
+        #radius=radius+radiusDelta
         #angle = angle*angleDelta
-        #center +=centerDelta
+        center +=centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
