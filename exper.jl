@@ -241,8 +241,6 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                     (1/362880) *v*v*v*v*v*v*v*v*v -
                     (1/39916800) *v*v*v*v*v*v*v*v*v*v*v + c
                 w = (-0.17) * w * w * vtemp - (1.5) * vtemp + c
-@time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 7.45, 1000.0, 6000,colorScheme=11,colorFactor=1,colorOffset=90,discrete=false,colorRepetitions=1,additionalParameter=0.0,turnIt=(0.0,1.0,0.0,0.0))
-
             end
             ypos += step
         end
