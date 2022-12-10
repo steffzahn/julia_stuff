@@ -209,13 +209,6 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
     local xpos = x-radius
     local colorLimit=div(colorsteps-colorOffset,colorFactor)
     local o = one(turnIt)
-    local z1=0.08
-    local z700=0.00000002
-    # a+b=z1, a+700.0*b=z700,
-    local b=(z700-z1)/699.0
-    local a=z1-b
-    local vadd=additionalParameter
-    #local vadd=a+b*additionalParameter
     for i in 1:size
         #println("ROW=",i)
         local ypos = y-radius
@@ -241,10 +234,15 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                     break
                 end
                 n += 1
-
                 local vtemp = v
-                v = v * v * (1.0/73.0) + w + c
-                w = vadd * w * vtemp - w * w * w - vtemp + c
+                v = v - (1/6)*v*v*v +
+                    (1/120) *v*v*v*v*v -
+                    (1/5040) *v*v*v*v*v*v*v +
+                    (1/362880) *v*v*v*v*v*v*v*v*v -
+                    (1/39916800) *v*v*v*v*v*v*v*v*v*v*v + c
+                w = (-0.17) * w * w * vtemp - (1.5) * vtemp + c
+@time mydraw("xx.png",(0.0, 0.0, 0.0, 0.0), 7.45, 1000.0, 6000,colorScheme=11,colorFactor=1,colorOffset=90,discrete=false,colorRepetitions=1,additionalParameter=0.0,turnIt=(0.0,1.0,0.0,0.0))
+
             end
             ypos += step
         end
@@ -262,7 +260,8 @@ function mydraw(fn::String,
                 colorOffset::Int64=0,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
-                additionalParameter::AbstractFloat=0.0)
+                additionalParameter::AbstractFloat=0.0,
+                sequenceCountParameter::Int64=2)
     local image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
@@ -276,22 +275,33 @@ end
 
 function myvideosequence()
     Random.seed!(8273262)
-    local radius=20.8
-    local center=(0.0, 0.0, 0.0, 0.0)
-    local centerDelta = ((-70.0,0.0,0.0,0.0)-center)*(1.0/700)
+    local sequenceCount=700
+    local radius=5.0
+    local center=(0.0, -4.3, 0.0, 0.0)
+    local centerDelta = ((0.0,3.0,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleDelta=zero(angle)
-    #local radiusDelta=(100.0-radius)*(1.0/700)
-    for iii in 1:700
+    #local radiusDelta=(100.0-radius)*(1.0/sequenceCount)
+    for iii in 1:sequenceCount
         local fn="xx_$(iii).png"
         #if iii % 100 == 1
         #    angleDelta=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
         #end
         println(iii," ",radius, " ", center)
-        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=16,
-               colorFactor=1,colorOffset=70,colorRepetitions=5,
+
+        local additionalParameter=convert(Float64,iii)
+        local z1=-5.0
+        local z700=3.0
+        # a+b=z1, a+700.0*b=z700,
+        local b=(z700-z1)/convert(Int64,sequenceCount-1)
+        local a=z1-b
+        # local vadd=additionalParameter
+        local vadd=a+b*additionalParameter
+
+        mydraw(fn,center, radius, 80.0, 1620,colorScheme=16,
+               colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
-               turnIt=angle,additionalParameter=convert(Float64,iii))
+               turnIt=angle,additionalParameter=vadd)
         #radius=radius+radiusDelta
         #angle = angle*angleDelta
         center +=centerDelta
