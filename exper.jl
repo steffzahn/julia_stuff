@@ -209,8 +209,13 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
     local xpos = x-radius
     local colorLimit=div(colorsteps-colorOffset,colorFactor)
     local o = one(turnIt)
+    local lastTime=time()
     for i in 1:size
-        #println("ROW=",i)
+        local now=time()
+        if now>lastTime+3.0
+            println("ROW=",i)
+            lastTime=now
+        end
         local ypos = y-radius
         for j in 1:size
             local n=1
@@ -234,13 +239,9 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                     break
                 end
                 n += 1
-                local vtemp = v
-                v = v - (1/6)*v*v*v +
-                    (1/120) *v*v*v*v*v -
-                    (1/5040) *v*v*v*v*v*v*v +
-                    (1/362880) *v*v*v*v*v*v*v*v*v -
-                    (1/39916800) *v*v*v*v*v*v*v*v*v*v*v + c
-                w = (-0.17) * w * w * vtemp - (1.5) * vtemp + c
+                vtemp = v
+                v = 0.07 * v * v + 2.3 * w + c
+                w = 0.07 * w * w + additionalParameter * vtemp + c
             end
             ypos += step
         end
