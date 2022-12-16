@@ -241,7 +241,7 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                 n += 1
                 vtemp = v
                 v = 0.07 * v * v + 2.3 * w + c
-                w = 0.07 * w * w + additionalParameter * vtemp + c
+                w = 0.07 * w * w - 0.6 * vtemp + c
             end
             ypos += step
         end
@@ -274,13 +274,15 @@ end
 
 function myvideosequence()
     Random.seed!(8273262)
-    local sequenceCount=700
-    local radius=5.0
-    local center=(0.0, -4.3, 0.0, 0.0)
-    local centerDelta = ((0.0,3.0,0.0,0.0)-center)*(1.0/sequenceCount)
+    local sequenceCount=1000
+    local sequenceCountPhase1=150
+    local radius=5.3
+    local center=(-1.55, 0.0, 0.0, 0.0)
+    local centerDelta = ((0.0,0.0,0.0,0.0)-center)*(1.0/sequenceCountPhase1)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleDelta=zero(angle)
-    #local radiusDelta=(100.0-radius)*(1.0/sequenceCount)
+    #local radiusDelta=(0.001-radius)*(1.0/sequenceCount)
+    local radiusFactor=(0.001/radius)^(1.0/sequenceCount)
     for iii in 1:sequenceCount
         local fn="xx_$(iii).png"
         #if iii % 100 == 1
@@ -289,21 +291,25 @@ function myvideosequence()
         println(iii," ",radius, " ", center)
 
         local additionalParameter=convert(Float64,iii)
-        local z1=-5.0
-        local z700=3.0
+        #local z1=-5.0
+        #local z700=3.0
         # a+b=z1, a+700.0*b=z700,
-        local b=(z700-z1)/convert(Int64,sequenceCount-1)
-        local a=z1-b
+        #local b=(z700-z1)/convert(Int64,sequenceCount-1)
+        #local a=z1-b
         # local vadd=additionalParameter
-        local vadd=a+b*additionalParameter
+        #local vadd=a+b*additionalParameter
 
-        mydraw(fn,center, radius, 80.0, 1620,colorScheme=16,
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=16,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
-               turnIt=angle,additionalParameter=vadd)
-        #radius=radius+radiusDelta
+               turnIt=angle,additionalParameter=0.0)
+        #radius += radiusDelta
+        radius *= radiusFactor
         #angle = angle*angleDelta
-        center +=centerDelta
+        if iii>sequenceCountPhase1
+            centerDelta=zero(center)
+        end
+        center += centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
