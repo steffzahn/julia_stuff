@@ -199,7 +199,8 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                  colorOffset::Int64=0,
                  colorRepetitions::Int64=1,
                  discrete::Bool=false,
-                 additionalParameter::AbstractFloat=0.0)::Matrix{RGB}
+                 additionalParameter::AbstractFloat=0.0,
+                 additionalParameter2::AbstractFloat=0.0)::Matrix{RGB}
     # println("PREC=",precision(x))
     local image=Matrix{RGB}(UndefInitializer(),size,size)
     local step = radius*2.0/convert(Float64,size)
@@ -240,7 +241,7 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                 end
                 n += 1
                 vtemp = v
-                v = 0.07 * v * v + 2.3 * w + c
+                v = 0.01 * v * v + 2.3 * w + c
                 w = 0.07 * w * w - 0.6 * vtemp + c
             end
             ypos += step
@@ -260,6 +261,7 @@ function mydraw(fn::String,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
                 additionalParameter::AbstractFloat=0.0,
+                additionalParameter2::AbstractFloat=0.0,
                 sequenceCountParameter::Int64=2)
     local image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
@@ -268,48 +270,50 @@ function mydraw(fn::String,
                   colorOffset=colorOffset,
                   colorRepetitions=colorRepetitions,
                   discrete=discrete,
-                  additionalParameter=additionalParameter)
+                  additionalParameter=additionalParameter,
+                  additionalParameter2=additionalParameter2)
     save(fn,image)
 end
 
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1000
-    local sequenceCountPhase1=150
-    local radius=5.3
-    local center=(-1.55, 0.0, 0.0, 0.0)
-    local centerDelta = ((0.0,0.0,0.0,0.0)-center)*(1.0/sequenceCountPhase1)
+    #local sequenceCountPhase1=150
+    local radius=13.0
+    local center=(-2.97448464,1.77740984, 0.0, 0.0)
+    #local centerDelta = ((0.0,0.0,0.0,0.0)-center)*(1.0/sequenceCountPhase1)
     local angle=(1.0,0.0,0.0,0.0)
-    #local angleDelta=zero(angle)
-    #local radiusDelta=(0.001-radius)*(1.0/sequenceCount)
-    local radiusFactor=(0.001/radius)^(1.0/sequenceCount)
+    local angleFactor=normalize((66.0,1.0,0.0,0.0))
+    local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
     for iii in 1:sequenceCount
         local fn="xx_$(iii).png"
         #if iii % 100 == 1
-        #    angleDelta=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
+        #    angleFactor=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
         #end
+
+        #local additionalParameter=convert(Float64,iii)
+        #local y1=-0.3
+        #local yend=0.1
+        #local z1=-0.5
+        #local zend=-1.0
+        # a+b=z1, a+700.0*b=z700,
+        #local b=(yend-y1)/convert(Int64,sequenceCount-1)
+        #local a=y1-b
+        #local vadd=a+b*additionalParameter
+        #b=(zend-z1)/convert(Int64,sequenceCount-1)
+        #a=z1-b
+        #local vadd2=a+b*additionalParameter
+
         println(iii," ",radius, " ", center)
 
-        local additionalParameter=convert(Float64,iii)
-        #local z1=-5.0
-        #local z700=3.0
-        # a+b=z1, a+700.0*b=z700,
-        #local b=(z700-z1)/convert(Int64,sequenceCount-1)
-        #local a=z1-b
-        # local vadd=additionalParameter
-        #local vadd=a+b*additionalParameter
-
-        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=16,
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=22,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
-               turnIt=angle,additionalParameter=0.0)
-        #radius += radiusDelta
+               turnIt=angle,
+               additionalParameter=0.0,additionalParameter2=0.0)
         radius *= radiusFactor
-        #angle = angle*angleDelta
-        if iii>sequenceCountPhase1
-            centerDelta=zero(center)
-        end
-        center += centerDelta
+        angle = angle*angleFactor
+        #center += centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
