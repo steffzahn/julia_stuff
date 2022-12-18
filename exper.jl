@@ -221,10 +221,11 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
         for j in 1:size
             local n=1
             local c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
-            local v=zero(c)
-            local w=zero(c)
+            local v1=zero(c)
+            local v2=zero(c)
+            local v3=zero(c)
             while true
-                local currentNorm=norm(v+w)
+                local currentNorm=norm(v1+v2+v3)
                 if currentNorm>=limit
                     if discrete
                       image[i,j] = colors[colorOffset+n*colorFactor]
@@ -240,9 +241,10 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                     break
                 end
                 n += 1
-                vtemp = v
-                v = 0.01 * v * v + 2.3 * w + c
-                w = 0.07 * w * w - 0.6 * vtemp + c
+                vtemp = v1
+                v1 = 0.0005 * v1 * v1 * v2 - 0.0005 * v1 * v1 * v1 * v1 + 2.3 * v2 + c
+                v2 = 0.0002 * v2 * v2 - additionalParameter * v3 + c
+                v3 = -0.25 * v3 * v3 * v2 - additionalParameter2 * vtemp + c
             end
             ypos += step
         end
