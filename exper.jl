@@ -12,8 +12,8 @@ import Base.isnan
 import Base.isinf
 import Random
 using Images
-using ColorTypes
-using Match
+#using ColorTypes
+#using Match
 
 function setindex((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
                    v::AbstractFloat, index::Int64
@@ -242,9 +242,9 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
                 end
                 n += 1
                 vtemp = v1
-                v1 = 0.0005 * v1 * v1 * v2 - 0.0005 * v1 * v1 * v1 * v1 + 2.3 * v2 + c
-                v2 = 0.0002 * v2 * v2 - additionalParameter * v3 + c
-                v3 = -0.25 * v3 * v3 * v2 - additionalParameter2 * vtemp + c
+                v1 = 7.3 * v2 * v2 * v3 - 2.35 * v1 + c
+                v2 = -0.4 * vtemp * vtemp * v3 - 2.0 * v3 * v3 + c
+                v3 = -0.065 * vtemp * vtemp * vtemp * v2 + 0.0003 * v2 * v2 * v2 + c
             end
             ypos += step
         end
@@ -280,22 +280,21 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1000
-    #local sequenceCountPhase1=150
-    local radius=13.0
-    local center=(-2.97448464,1.77740984, 0.0, 0.0)
-    #local centerDelta = ((0.0,0.0,0.0,0.0)-center)*(1.0/sequenceCountPhase1)
+    local radius=1.1
+    local center=(-0.33487489, 0.39597191,0.0,0.0)
     local angle=(1.0,0.0,0.0,0.0)
     local angleFactor=normalize((66.0,1.0,0.0,0.0))
+    #local angleFactor
     local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
     for iii in 1:sequenceCount
         local fn="xx_$(iii).png"
         #if iii % 100 == 1
-        #    angleFactor=normalize((66.0,rand(Float64)-0.3,6.0*(rand(Float64)-0.7),4.0*(rand(Float64)-0.4)))
+        #    angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
         #end
 
         #local additionalParameter=convert(Float64,iii)
-        #local y1=-0.3
-        #local yend=0.1
+        #local y1=-7.3
+        #local yend=7.3
         #local z1=-0.5
         #local zend=-1.0
         # a+b=z1, a+700.0*b=z700,
@@ -306,7 +305,7 @@ function myvideosequence()
         #a=z1-b
         #local vadd2=a+b*additionalParameter
 
-        println(iii," ",radius, " ", center)
+        println(iii," ",angle)
 
         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=22,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
