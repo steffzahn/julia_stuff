@@ -263,8 +263,7 @@ function mydraw(fn::String,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
                 additionalParameter::AbstractFloat=0.0,
-                additionalParameter2::AbstractFloat=0.0,
-                sequenceCountParameter::Int64=2)
+                additionalParameter2::AbstractFloat=0.0)
     local image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
