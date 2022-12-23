@@ -15,64 +15,64 @@ using Images
 #using ColorTypes
 #using Match
 
-function setindex((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-                   v::AbstractFloat, index::Int64
-                   )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function setindex((x1,x2,x3,x4)::Tuple{T, T, T, T},
+                   v::T, index::Int64
+                   )::Tuple{T, T, T, T}  where {T<:AbstractFloat}
     index==1 && return (v,x2,x3,x4)
     index==2 && return (x1,v,x3,x4)
     index==3 && return (x1,x2,v,x4)
     return (x1,x2,x3,v)
 end
-function zero(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-              )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function zero(a::Tuple{T, T, T, T}
+              )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (0.0,0.0,0.0,0.0)
 end
-function iszero((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-              )::Bool
+function iszero((x1,x2,x3,x4)::Tuple{T, T, T, T}
+              )::Bool where {T<:AbstractFloat}
     return x1==0.0 && x2==0.0 && x3==0.0 && x4==0.0
 end
 
-function one((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-             )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function one((x1,x2,x3,x4)::Tuple{T, T, T, T}
+             )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (1.0,0.0,0.0,0.0)
 end
 
-function +((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function +((x1,x2,x3,x4)::Tuple{T, T, T, T},
+           (y1,y2,y3,y4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1+y1,x2+y2,x3+y3,x4+y4)
 end
 
-function -((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function -((x1,x2,x3,x4)::Tuple{T, T, T, T},
+           (y1,y2,y3,y4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1-y1,x2-y2,x3-y3, x4-y4)
 end
-function -((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function -((x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (-x1,-x2,-x3,-x4)
 end
 
-function *((x1,x2,x3, x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}, y::AbstractFloat
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function *((x1,x2,x3, x4)::Tuple{T, T, T, T}, y::T
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1*y,x2*y,x3*y,x4*y)
 end
-function *(y::AbstractFloat, (x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function *(y::T, (x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1*y,x2*y,x3*y,x4*y)
 end
 
 # \cdot tab
-function ⋅((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-          (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat})::AbstractFloat
+function ⋅((x1,x2,x3,x4)::Tuple{T, T, T, T},
+          (y1,y2,y3,y4)::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
     return x1*y1+x2*y2+x3*y3+x4*y4
 end
 
-function norm(x::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat})::AbstractFloat
+function norm(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
     return sqrt(x ⋅ x)
 end
-function normalize(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-                   )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function normalize(a::Tuple{T, T, T, T}
+                   )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     local n=norm(a)
     if n==0.0
         return a
@@ -80,45 +80,54 @@ function normalize(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, Abstrac
     return (1.0/n)*a
 end
 
-function conj((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-             )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function conj((x1,x2,x3,x4)::Tuple{T, T, T, T}
+             )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1,-x2,-x3,-x4)
 end
 
-function inv((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-             )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function inv((x1,x2,x3,x4)::Tuple{T, T, T, T}
+             )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (1.0/(x1*x1+x2*x2+x3*x3+x4*x4))*(x1,-x2,-x3,-x4)
 end
 
-function isnan((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-               )::Bool
+function isnan((x1,x2,x3,x4)::Tuple{T, T, T, T}
+               )::Bool where {T<:AbstractFloat}
     return isnan(x1) || isnan(x2) || isnan(x3) || isnan(x4) 
 end
 
-function isinf((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-               )::Bool
+function isinf((x1,x2,x3,x4)::Tuple{T, T, T, T}
+               )::Bool where {T<:AbstractFloat}
     return isinf(x1) || isinf(x2) || isinf(x3) || isinf(x4) 
 end
 
-function *((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function *((x1,x2,x3,x4)::Tuple{T, T, T, T},
+           (y1,y2,y3,y4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1*y1-x2*y2-x3*y3-x4*y4,
-            x2*y1+x1*y2+x3*y4-x4*y3,
-            x3*y1+x1*y3-x2*y4+x4*y2,
-            x1*y4+x4*y1+x2*y3-x3*y2)
+            x1*y2+x2*y1+x3*y4-x4*y3,
+            x1*y3-x2*y4+x3*y1+x4*y2,
+            x1*y4+x2*y3-x3*y2+x4*y1)
 end
 
-function /(a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-           b::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function *((x1,x2,x3,x4)::Tuple{T, T, T, T},
+           m::Matrix{T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return (x1*m[1,1]+x2*m[2,1]+x3*m[3,1]+x4*m[4,1],
+            x1*m[1,2]+x2*m[2,2]+x3*m[3,2]+x4*m[4,2],
+            x1*m[1,3]+x2*m[2,3]+x3*m[3,3]+x4*m[4,3],
+            x1*m[1,4]+x2*m[2,4]+x3*m[3,4]+x4*m[4,4])
+end
+
+function /(a::Tuple{T, T, T, T},
+           b::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return a*inv(b)
 end
 
 # wrong multiplication
-function funnyMultiply((x1,x2,x3,x4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-           (y1,y2,y3,y4)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
-           )::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}
+function funnyMultiply((x1,x2,x3,x4)::Tuple{T, T, T, T},
+           (y1,y2,y3,y4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
      return (x1*y1-x2*y2-x3*y3-x4*y4,
              x2*y1+x1*y2+x3*y4+x4*y3,
              x3*y1+x1*y3+x2*y4+x4*y2,
@@ -191,16 +200,16 @@ function initPalette(;colorScheme::Int64=0,
     return (colors,colorsteps)
 end
 
-function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-                 radius::AbstractFloat,limit::AbstractFloat,size::Int64;
-                 turnIt::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}=(1.0,0.0,0.0,0.0),
+function myimage((x,y,z,u)::Tuple{T, T, T, T},
+                 radius::T,limit::T,size::Int64;
+                 turnIt::Tuple{T, T, T, T}=(1.0,0.0,0.0,0.0),
                  colorScheme::Int64=0,
                  colorFactor::Int64=1,
                  colorOffset::Int64=0,
                  colorRepetitions::Int64=1,
                  discrete::Bool=false,
-                 additionalParameter::AbstractFloat=0.0,
-                 additionalParameter2::AbstractFloat=0.0)::Matrix{RGB}
+                 additionalParameter::T=0.0,
+                 additionalParameter2::T=0.0)::Matrix{RGB} where {T<:AbstractFloat}
     # println("PREC=",precision(x))
     local image=Matrix{RGB}(UndefInitializer(),size,size)
     local step = radius*2.0/convert(Float64,size)
@@ -254,16 +263,16 @@ function myimage((x,y,z,u)::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, A
 end
 
 function mydraw(fn::String,
-                a::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat},
-                radius::AbstractFloat,limit::AbstractFloat,size::Int64;
-                turnIt::Tuple{AbstractFloat, AbstractFloat, AbstractFloat, AbstractFloat}=(1.0,0.0,0.0,0.0),
+                a::Tuple{T, T, T, T},
+                radius::T,limit::T,size::Int64;
+                turnIt::Tuple{T, T, T, T}=(1.0,0.0,0.0,0.0),
                 colorScheme::Int64=0,
                 colorFactor::Int64=1,
                 colorOffset::Int64=0,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
-                additionalParameter::AbstractFloat=0.0,
-                additionalParameter2::AbstractFloat=0.0)
+                additionalParameter::T=0.0,
+                additionalParameter2::T=0.0) where {T<:AbstractFloat}
     local image=myimage(a,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
