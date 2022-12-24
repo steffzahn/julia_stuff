@@ -252,7 +252,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 n += 1
                 vtemp = v1
                 v1 = 7.3 * v2 * v2 * v3 - 2.35 * v1 + c
-                v2 = -0.4 * vtemp * vtemp * v3 - 2.0 * v3 * v3 + c
+                v2 = additionalParameter * vtemp * (v1 ⋅ v3) - additionalParameter2 * v3 * v3 + c
                 v3 = -0.065 * vtemp * vtemp * vtemp * v2 + 0.0003 * v2 * v2 * v2 + c
             end
             ypos += step
