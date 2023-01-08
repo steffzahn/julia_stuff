@@ -10,6 +10,8 @@ import Base.one
 import Base.inv
 import Base.isnan
 import Base.isinf
+import Base.abs
+import Base.abs2
 import Random
 using Images
 #using ColorTypes
@@ -70,6 +72,12 @@ end
 
 function norm(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
     return sqrt(x ⋅ x)
+end
+function abs(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
+    return sqrt(x ⋅ x)
+end
+function abs2(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
+    return x ⋅ x
 end
 function normalize(a::Tuple{T, T, T, T}
                    )::Tuple{T, T, T, T} where {T<:AbstractFloat}
