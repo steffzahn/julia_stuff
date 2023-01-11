@@ -171,10 +171,14 @@ function initPalette(;colorScheme::Int64=0,
             baseColor1=RGB(scaledGray,0.0,0.4*scaledGray)
             baseColor2=RGB(0.635294*scaledGray,scaledGray,0.0)
             baseColor3=RGB(0.0,0.815686*scaledGray,scaledGray)
-        else
+        elseif colorSet == 2
             baseColor1=RGB(0.2588*scaledGray,0.494*scaledGray,scaledGray)
             baseColor2=RGB(scaledGray,0.2588*scaledGray,0.8274*scaledGray)
             baseColor3=RGB(0.2588*scaledGray,scaledGray,0.902*scaledGray)
+        else
+            baseColor1=RGB(0.89*scaledGray,0.267*scaledGray,0.353*scaledGray)
+            baseColor2=RGB(0.133*scaledGray,0.373*scaledGray,0.149*scaledGray)
+            baseColor3=RGB(0.635*scaledGray,0.561*scaledGray,0.812*scaledGray)
         end
         if colorScheme == 1
             color1=baseColor3
@@ -263,7 +267,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (mySum(v2)>1.0 ? 0.7 * v1 * v1 : 0.03 * v2 * v2 * v2)  + c
+                v1 = (mySum(v2)>1.0 ? 0.7 * v1 * v1 : 0.03 * v2 * v2 * v2) + c
                 v2 = (mySum(vtemp)<-1.0 ? vtemp - 1.5 * v2 : -2.5 * vtemp * v2) + c
             end
             ypos += step
