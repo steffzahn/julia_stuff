@@ -146,6 +146,10 @@ function mySum((x1,x2,x3,x4)::Tuple{T, T, T, T}
            )::T where {T<:AbstractFloat}
      return x1+x2+x3+x4
 end
+function myAbs((x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+     return (abs(x1),abs(x2),abs(x3),abs(x4))
+end
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
@@ -267,7 +271,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (mySum(v2)>1.0 ? 0.7 * v1 * v1 : 0.03 * v2 * v2 * v2) + c
+                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
                 v2 = (mySum(vtemp)<-1.0 ? vtemp - 1.5 * v2 : -2.5 * vtemp * v2) + c
             end
             ypos += step
@@ -303,13 +307,13 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1000
-    local radius=3.0
-    local center=(-0.7002524805,-1.3696969334,0.0,0.0)
-    #local centerDelta=((0.0,0.0,0.0,0.0)-center)*(1.0/sequenceCount)
+    local radius=2.9
+    local center=(-1.99,0.0,0.0,0.0)
+    #local centerDelta=((-1.99,0.0,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     local angleFactor=normalize((66.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.0000000004/radius)^(1.0/sequenceCount)
+    local radiusFactor=(0.00000009/radius)^(1.0/sequenceCount)
     #local y1=-16.0
     #local yend=8.0
     #local z1=-0.5
@@ -330,7 +334,7 @@ function myvideosequence()
         #local vadd=a+b*additionalParameter
         #local vadd2=a2+b2*additionalParameter
 
-        println(iii," ",radius, " ", angle)
+        println(iii," ",radius, " ", angle, " ", center)
 
         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=22,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
