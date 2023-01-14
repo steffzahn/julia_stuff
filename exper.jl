@@ -179,10 +179,14 @@ function initPalette(;colorScheme::Int64=0,
             baseColor1=RGB(0.2588*scaledGray,0.494*scaledGray,scaledGray)
             baseColor2=RGB(scaledGray,0.2588*scaledGray,0.8274*scaledGray)
             baseColor3=RGB(0.2588*scaledGray,scaledGray,0.902*scaledGray)
-        else
+        elseif colorSet == 3
             baseColor1=RGB(0.89*scaledGray,0.267*scaledGray,0.353*scaledGray)
             baseColor2=RGB(0.133*scaledGray,0.373*scaledGray,0.149*scaledGray)
             baseColor3=RGB(0.635*scaledGray,0.561*scaledGray,0.812*scaledGray)
+        else
+            baseColor1=RGB(0.965*scaledGray,0.471*scaledGray,0.027*scaledGray)
+            baseColor2=RGB(0.0*scaledGray,0.592*scaledGray,0.584*scaledGray)
+            baseColor3=RGB(0.345*scaledGray,0.604*scaledGray,0.933*scaledGray)
         end
         if colorScheme == 1
             color1=baseColor3
