@@ -150,6 +150,10 @@ function myAbs((x1,x2,x3,x4)::Tuple{T, T, T, T}
            )::Tuple{T, T, T, T} where {T<:AbstractFloat}
      return (abs(x1),abs(x2),abs(x3),abs(x4))
 end
+function myFunc((x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::T where {T<:AbstractFloat}
+     return abs(x1*x1-x2*x2)+abs(x3*x3-x4*x4)
+end
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
@@ -276,7 +280,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 n += 1
                 vtemp = v1
                 v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
-                v2 = (mySum(vtemp)<-1.0 ? vtemp - 1.5 * v2 : -2.5 * vtemp * v2) + c
+                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
             end
             ypos += step
         end
@@ -311,20 +315,20 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1000
-    local radius=2.9
-    local center=(-1.99,0.0,0.0,0.0)
+    local radius=1.0
+    local center=(-1.5001,-0.0019736555559,0.0,0.0)
     #local centerDelta=((-1.99,0.0,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
-    local angleFactor=normalize((66.0,1.0,0.0,0.0))
+    #local angleFactor=normalize((76.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.00000009/radius)^(1.0/sequenceCount)
-    #local y1=-16.0
-    #local yend=8.0
+    #local radiusFactor=(0.000000000001/radius)^(1.0/sequenceCount)
+    local y1=3.5
+    local yend=2.5
     #local z1=-0.5
     #local zend=-1.0
     # a+b=z1, a+700.0*b=z700,
-    #local b=(yend-y1)/convert(Int64,sequenceCount-1)
-    #local a=y1-b
+    local b=(yend-y1)/convert(Int64,sequenceCount-1)
+    local a=y1-b
     #local b2=(zend-z1)/convert(Int64,sequenceCount-1)
     #local a2=z1-b2
     
@@ -334,19 +338,19 @@ function myvideosequence()
         #    angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
         #end
 
-        #local additionalParameter=convert(Float64,iii)
-        #local vadd=a+b*additionalParameter
+        local additionalParameter=convert(Float64,iii)
+        local vadd=a+b*additionalParameter
         #local vadd2=a2+b2*additionalParameter
 
-        println(iii," ",radius, " ", angle, " ", center)
+        println(iii," ",vadd)
 
-        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=22,
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,
-               additionalParameter=0.0,additionalParameter2=0.0)
-        radius *= radiusFactor
-        angle = angle*angleFactor
+               additionalParameter=vadd,additionalParameter2=0.0)
+        #radius *= radiusFactor
+        #angle = angle*angleFactor
         #center += centerDelta
     end
 

@@ -1,3 +1,20 @@
+cyrus the virus
+@time mydraw("xx.png",(-1.43,-0.00197,0.0,0.0), 0.08, 1000.0, 6000,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.0,additionalParameter2=0.0)
+                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
+function mySum((x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::T where {T<:AbstractFloat}
+     return x1+x2+x3+x4
+end
+function myAbs((x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+     return (abs(x1),abs(x2),abs(x3),abs(x4))
+end
+function myFunc((x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::T where {T<:AbstractFloat}
+     return abs(x1*x1-x2*x2)+abs(x3*x3-x4*x4)
+end
+
 christmas morning
 @time mydraw("xx.png",(0.22, 0.0,0.0,0.0), 1.2, 1000.0, 10000,colorScheme=22,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=1.3,additionalParameter2=14.0)
                  vtemp = v1
