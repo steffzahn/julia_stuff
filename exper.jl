@@ -55,6 +55,16 @@ function -((x1,x2,x3,x4)::Tuple{T, T, T, T}
     return (-x1,-x2,-x3,-x4)
 end
 
+function *((x1,x2,x3, x4)::Tuple{T, T, T, T}, y::AbstractFloat
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    local yy = convert(T,y)
+    return (x1*yy,x2*yy,x3*yy,x4*yy)
+end
+function *(y::AbstractFloat, (x1,x2,x3,x4)::Tuple{T, T, T, T}
+           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    local yy = convert(T,y)
+    return (x1*yy,x2*yy,x3*yy,x4*yy)
+end
 function *((x1,x2,x3, x4)::Tuple{T, T, T, T}, y::T
            )::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return (x1*y,x2*y,x3*y,x4*y)
