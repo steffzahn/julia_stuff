@@ -289,8 +289,8 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
-                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
+                v1 = (myFunc(v2)>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v2 = (abs(mySum(vtemp))<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
             end
             ypos += step
         end
@@ -325,13 +325,14 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1000
+    local sequenceCount1=200
     local radius=0.08
     local center=(-1.430030034,-0.00194,0.0,0.0)
-    #local centerDelta=((-1.99,0.0,0.0,0.0)-center)*(1.0/sequenceCount)
-    local angle=(1.0,0.0,-0.5,0.0)
+    local centerDelta=((-1.4664069419,0.04918820983,0.0,0.0)-center)*(1.0/sequenceCount1)
+    local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((86.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.0000000008/radius)^(1.0/sequenceCount)
+    local radiusFactor=(0.0000000001/radius)^(1.0/sequenceCount)
     #local y1=3.5
     #local yend=2.5
     #local z1=-0.5
@@ -352,7 +353,7 @@ function myvideosequence()
         #local vadd=a+b*additionalParameter
         #local vadd2=a2+b2*additionalParameter
 
-        println(iii," ",radius)
+        println(iii," ",radius," ",center)
 
         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
@@ -361,7 +362,9 @@ function myvideosequence()
                additionalParameter=0.0,additionalParameter2=0.0)
         radius *= radiusFactor
         #angle = angle*angleFactor
-        #center += centerDelta
+        if iii <= sequenceCount1
+            center += centerDelta
+        end
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
