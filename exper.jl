@@ -162,7 +162,7 @@ function myAbs((x1,x2,x3,x4)::Tuple{T, T, T, T}
 end
 function myFunc((x1,x2,x3,x4)::Tuple{T, T, T, T}
            )::T where {T<:AbstractFloat}
-     return abs(x1*x1-x2*x2)+abs(x3*x3-x4*x4)
+     return abs(x2*x2/(x1*x1*x1+0.5)-x3)+abs(x3*x3/(x2*x2*x2+0.5)-x4)
 end
 
 function initPalette(;colorScheme::Int64=0,
@@ -289,8 +289,8 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (myFunc(v2)>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
-                v2 = (abs(mySum(vtemp))<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
+                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * myAbs(vtemp) * v2) + c
             end
             ypos += step
         end

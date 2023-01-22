@@ -1,3 +1,6 @@
+arena
+ @time mydraw("xx.png",(-1.43,0.0,0.0,0.0), 0.08, 1000.0, 6000,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.0,additionalParameter2=0.0)
+
 cyrus the virus
 @time mydraw("xx.png",(-1.43,-0.00197,0.0,0.0), 0.08, 1000.0, 6000,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.0,additionalParameter2=0.0)
                 v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
