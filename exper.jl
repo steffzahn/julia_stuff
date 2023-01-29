@@ -249,7 +249,6 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                  discrete::Bool=false,
                  additionalParameter::T=0.0,
                  additionalParameter2::T=0.0)::Matrix{RGB} where {T<:AbstractFloat}
-    # println("PREC=",precision(x))
     local image=Matrix{RGB}(UndefInitializer(),size,size)
     local step = radius*2.0/convert(Float64,size)
     local (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
@@ -289,7 +288,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v1 = (abs(mySum(v2))>7.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
                 v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * myAbs(vtemp) * v2) + c
             end
             ypos += step
@@ -324,15 +323,14 @@ end
 
 function myvideosequence()
     Random.seed!(8273262)
-    local sequenceCount=1000
-    local sequenceCount1=200
+    local sequenceCount=1500
     local radius=0.08
-    local center=(-1.430030034,-0.00194,0.0,0.0)
-    local centerDelta=((-1.4664069419,0.04918820983,0.0,0.0)-center)*(1.0/sequenceCount1)
+    local center=(-1.425500207,0.0,0.0,0.0)
+    #local centerDelta=((-1.4664069419,0.04918820983,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((86.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.0000000001/radius)^(1.0/sequenceCount)
+    local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
     #local y1=3.5
     #local yend=2.5
     #local z1=-0.5
@@ -362,9 +360,7 @@ function myvideosequence()
                additionalParameter=0.0,additionalParameter2=0.0)
         radius *= radiusFactor
         #angle = angle*angleFactor
-        if iii <= sequenceCount1
-            center += centerDelta
-        end
+        #center += centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
