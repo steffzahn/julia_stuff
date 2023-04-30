@@ -164,6 +164,19 @@ function myFunc((x1,x2,x3,x4)::Tuple{T, T, T, T}
            )::T where {T<:AbstractFloat}
      return abs(x2*x2/(x1*x1*x1+0.5)-x3)+abs(x3*x3/(x2*x2*x2+0.5)-x4)
 end
+function wave(x::T, p::T)::T where {T<:AbstractFloat}
+    local xx = x / p
+    local a = convert(T,(floor(Int64,xx)))
+    local m = a + convert(T,0.5)
+    local b = a + convert(T,1.0)
+    if xx<m
+        local t = xx-a
+        return t*t
+    else
+        local t = b - xx
+        return t*t
+    end
+end
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
@@ -288,7 +301,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (abs(mySum(v2))>7.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v1 = (abs(mySum(v2))>7.0 ? 0.7 * v1 * v1 : 0.03 * wave(mySum(v2),additionalParameter)/0.25 * myAbs(v2) * v2 * v2) + c
                 v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * myAbs(vtemp) * v2) + c
             end
             ypos += step
@@ -330,14 +343,14 @@ function myvideosequence()
     local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((86.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
-    #local y1=3.5
-    #local yend=2.5
+    #local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
+    local y1=3.4
+    local yend=13.0
     #local z1=-0.5
     #local zend=-1.0
     # a+b=z1, a+700.0*b=z700,
-    #local b=(yend-y1)/convert(Int64,sequenceCount-1)
-    #local a=y1-b
+    local b=(yend-y1)/convert(Int64,sequenceCount-1)
+    local a=y1-b
     #local b2=(zend-z1)/convert(Int64,sequenceCount-1)
     #local a2=z1-b2
     
@@ -347,8 +360,8 @@ function myvideosequence()
         #    angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
         #end
 
-        #local additionalParameter=convert(Float64,iii)
-        #local vadd=a+b*additionalParameter
+        local additionalParameter=convert(Float64,iii)
+        local vadd=a+b*additionalParameter
         #local vadd2=a2+b2*additionalParameter
 
         println(iii," ",radius," ",center)
@@ -357,8 +370,8 @@ function myvideosequence()
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,
-               additionalParameter=0.0,additionalParameter2=0.0)
-        radius *= radiusFactor
+               additionalParameter=vadd,additionalParameter2=0.0)
+        #radius *= radiusFactor
         #angle = angle*angleFactor
         #center += centerDelta
     end
