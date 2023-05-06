@@ -1,3 +1,6 @@
+new wave (2560 x 1440)
+mydraw("xx.png",(-1.432,0.0,0.0,0.0), 0.12, 1000.0, 2560,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=13.0,additionalParameter2=0.0)
+
 arena wallpaper 2560 x 1440
  @time mydraw("xx.png",(-1.43,0.003,0.0,0.0), 0.13, 1000.0, 2560,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.0,additionalParameter2=0.0)
 
