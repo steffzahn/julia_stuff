@@ -162,7 +162,7 @@ function myAbs((x1,x2,x3,x4)::Tuple{T, T, T, T}
 end
 function myFunc((x1,x2,x3,x4)::Tuple{T, T, T, T}
            )::T where {T<:AbstractFloat}
-     return abs(x2*x2/(x1*x1*x1+0.5)-x3)+abs(x3*x3/(x2*x2*x2+0.5)-x4)
+     return abs(x1*x1-x2*x2)+abs(x3*x3-x4*x4)
 end
 
 function wave(x::T, p::T)::T where {T<:AbstractFloat}
@@ -192,6 +192,15 @@ function wave2(x::T, p::T)::T where {T<:AbstractFloat}
         local t = b - xx
         return odd ? - t*t : t*t
     end
+end
+function wave2((x1,x2,x3,x4)::Tuple{T, T, T, T}, (p1,p2,p3,p4)::Tuple{T, T, T, T}, (o1,o2,o3,o4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return (wave2(x1,abs(p1)+abs(o1)),wave2(x2,abs(p2)+abs(o2)),wave2(x3,abs(p3)+abs(o3)),wave2(x4,abs(p4)+abs(o4)))
+end
+function wave2(x::Tuple{T, T, T, T}, p::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return wave2(x,p,(0.2,0.2,0.2,0.2))
+end
+function wave2(x::Tuple{T, T, T, T}, p::T)::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return wave2(x,(p,p,p,p))
 end
 
 function initPalette(;colorScheme::Int64=0,
@@ -317,8 +326,10 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (abs(mySum(v2))>7.0 ? 0.7 * (wave2(mySum(v1),additionalParameter)/0.25) * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
-                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * myAbs(vtemp) * v2) + c
+                local t1 = wave2(v1,additionalParameter)
+                local t2 = wave2(v2,additionalParameter2)
+                v1 = 0.1 * v1 * t1 + t1 * t2  + c
+                v2 = v2 * (0.1 * v2 + t2) + c
             end
             ypos += step
         end
@@ -353,13 +364,13 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1500
-    local radius=80.0
-    local center=(-0.3761505,-0.02044106,0.0,0.0)
+    local radius=22.0
+    local center=(3.9071333545,6.4175231812,0.0,0.0)
     #local centerDelta=((-1.4664069419,0.04918820983,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((86.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.00000007/radius)^(1.0/sequenceCount)
+    local radiusFactor=(0.000000001/radius)^(1.0/sequenceCount)
     #local y1=3.4
     #local yend=13.0
     #local z1=-0.5
@@ -380,13 +391,14 @@ function myvideosequence()
         #local vadd=a+b*additionalParameter
         #local vadd2=a2+b2*additionalParameter
 
-        println(iii," ",radius," ",center)
+        println(iii," ",radius)
 
         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,
-               additionalParameter=3.0,additionalParameter2=0.0)
+               additionalParameter=1.8,additionalParameter2=1.6)
+
         radius *= radiusFactor
         #angle = angle*angleFactor
         #center += centerDelta
