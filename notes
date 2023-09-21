@@ -1,3 +1,8 @@
+wave12_43 (2560 x 1440)
+checkout wave 2 (78aaf71)
+ mydraw("xx.png",(-0.3761505,-0.02044106,0.0,0.0), 0.0002, 1000.0, 6000,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=3.0,additionalParameter2=0.0)
+rotate and cut
+
 drawn with ink (2560 x 1440)
 mydraw("xx.png",(3.9071333545,6.4175231812,0.0,0.0), 0.00000000256, 1000.0, 2560,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=1.8,additionalParameter2=1.6)
 
