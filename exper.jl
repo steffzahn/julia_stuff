@@ -328,7 +328,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 vtemp = v1
                 local t1 = wave2(v1,additionalParameter)
                 local t2 = wave2(v2,additionalParameter2)
-                v1 = 0.1 * v1 * t1 + t1 * t2  + c
+                v1 = ( (norm(t2)>0.2 ) ? 13.0 * v1 * (t1+t2) : v1*v1 )  + c
                 v2 = v2 * (0.1 * v2 + t2) + c
             end
             ypos += step
@@ -364,13 +364,13 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1500
-    local radius=22.0
-    local center=(3.9071333545,6.4175231812,0.0,0.0)
+    local radius=28.0
+    local center=(3.7893,6.9215,0.0,0.0)
     #local centerDelta=((-1.4664069419,0.04918820983,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((86.0,1.0,0.0,0.0))
     #local angleFactor
-    local radiusFactor=(0.000000001/radius)^(1.0/sequenceCount)
+    local radiusFactor=(0.0007/radius)^(1.0/sequenceCount)
     #local y1=3.4
     #local yend=13.0
     #local z1=-0.5
@@ -397,7 +397,7 @@ function myvideosequence()
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,
-               additionalParameter=1.8,additionalParameter2=1.6)
+               additionalParameter=2.8,additionalParameter2=2.6)
 
         radius *= radiusFactor
         #angle = angle*angleFactor
