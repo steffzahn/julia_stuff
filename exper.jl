@@ -366,11 +366,11 @@ function myvideosequence()
     local sequenceCount=1500
     local radius=28.0
     local center=(3.7893,6.9215,0.0,0.0)
-    #local centerDelta=((-1.4664069419,0.04918820983,0.0,0.0)-center)*(1.0/sequenceCount)
+    local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
-    #local angleFactor=normalize((86.0,1.0,0.0,0.0))
-    #local angleFactor
-    local radiusFactor=(0.0007/radius)^(1.0/sequenceCount)
+    #local angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
+    local angleFactor
+    #local radiusFactor=(0.0007/radius)^(1.0/sequenceCount)
     #local y1=3.4
     #local yend=13.0
     #local z1=-0.5
@@ -383,9 +383,9 @@ function myvideosequence()
     
     for iii in 1:sequenceCount
         local fn="xx_$(iii).png"
-        #if iii % 100 == 1
-        #    angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
-        #end
+        if iii % 250 == 1
+            angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
+        end
 
         #local additionalParameter=convert(Float64,iii)
         #local vadd=a+b*additionalParameter
@@ -397,18 +397,16 @@ function myvideosequence()
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,
-               additionalParameter=2.8,additionalParameter2=2.6)
+               additionalParameter=3.8,additionalParameter2=5.6)
 
-        radius *= radiusFactor
-        #angle = angle*angleFactor
-        #center += centerDelta
+        #radius *= radiusFactor
+        angle = angle*angleFactor
+        center += centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 2 -vf scale=720:720 -b:a 128k output.mp4
 
-    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=1080:1080 -b:a 128k output.mp4
-    #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 2 -vf scale=1080:1080 -b:a 128k output.mp4
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=1080:1080 -b:a 128k output.mp4
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 2 -vf scale=1080:1080 -b:a 128k output.mp4
 
