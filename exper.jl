@@ -326,10 +326,8 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 end
                 n += 1
                 vtemp = v1
-                local t1 = wave2(v1,additionalParameter)
-                local t2 = wave2(v2,additionalParameter2)
-                v1 = ( (norm(t2)>0.2 ) ? 13.0 * v1 * (t1+t2) : v1*v1 )  + c
-                v2 = v2 * (0.1 * v2 + t2) + c
+                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v2 = (mySum(vtemp)<-1.0 ? vtemp - 1.5 * v2 : -2.5 * vtemp * v2) + wave2(v1,additionalParameter)*additionalParameter2 + c
             end
             ypos += step
         end
@@ -364,13 +362,13 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1500
-    local radius=28.0
-    local center=(3.7893,6.9215,0.0,0.0)
-    local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
+    local radius=2.0
+    local center=(-1.99,0.0,0.0,0.0)
+    #local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
-    local angleFactor
-    #local radiusFactor=(0.0007/radius)^(1.0/sequenceCount)
+    #local angleFactor
+    local radiusFactor=(0.0000000004/radius)^(1.0/sequenceCount)
     #local y1=3.4
     #local yend=13.0
     #local z1=-0.5
@@ -383,9 +381,9 @@ function myvideosequence()
     
     for iii in 1:sequenceCount
         local fn="xx_$(iii).png"
-        if iii % 250 == 1
-            angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
-        end
+        #if iii % 250 == 1
+        #    angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
+        #end
 
         #local additionalParameter=convert(Float64,iii)
         #local vadd=a+b*additionalParameter
@@ -397,11 +395,11 @@ function myvideosequence()
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
                turnIt=angle,
-               additionalParameter=3.8,additionalParameter2=5.6)
+               additionalParameter=1.0,additionalParameter2=4.2)
 
-        #radius *= radiusFactor
-        angle = angle*angleFactor
-        center += centerDelta
+        radius *= radiusFactor
+        #angle = angle*angleFactor
+        #center += centerDelta
     end
 
     #  ffmpeg -i xx_%d.png -c:v libx264 -b:v 30000k -pass 1 -vf scale=720:720 -b:a 128k output.mp4
