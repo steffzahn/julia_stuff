@@ -327,7 +327,7 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
                 n += 1
                 vtemp = v1
                 v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
-                v2 = (mySum(vtemp)<-1.0 ? vtemp - 1.5 * v2 : -2.5 * vtemp * v2) + wave2(v1,additionalParameter)*additionalParameter2 + c
+                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : (3.5 * vtemp * v2 + additionalParameter2 * wave2(vtemp,additionalParameter))) + c
             end
             ypos += step
         end
