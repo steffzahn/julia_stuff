@@ -13,6 +13,10 @@ import Base.isinf
 import Base.abs
 import Base.abs2
 import Random
+import Base.sin
+import Base.cos
+import Base.tan
+import Base.cot
 using Images
 #using ColorTypes
 #using Match
@@ -201,6 +205,18 @@ function wave2(x::Tuple{T, T, T, T}, p::Tuple{T, T, T, T})::Tuple{T, T, T, T} wh
 end
 function wave2(x::Tuple{T, T, T, T}, p::T)::Tuple{T, T, T, T} where {T<:AbstractFloat}
     return wave2(x,(p,p,p,p))
+end
+function sin((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return (sin(x1),sin(x2),sin(x3),sin(x4))
+end
+function cos((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return (cos(x1),cos(x2),cos(x3),cos(x4))
+end
+function tan((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return (tan(x1),tan(x2),tan(x3),tan(x4))
+end
+function cot((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
+    return (cot(x1),cot(x2),cot(x3),cot(x4))
 end
 
 function initPalette(;colorScheme::Int64=0,
