@@ -378,13 +378,13 @@ end
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1500
-    local radius=0.015
-    local center=(-0.176125990504,-1.0645075862505,0.0,0.0)
+    local radius=0.003
+    local center=(-2.50692110,0.00089513,0.0,0.0)
     #local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=(1.0,0.0,0.0,0.0)
     #local angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
     #local angleFactor
-    local radiusFactor=(0.00000000002/radius)^(1.0/sequenceCount)
+    local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
     #local y1=3.4
     #local yend=13.0
     #local z1=-0.5
@@ -407,11 +407,13 @@ function myvideosequence()
 
         println(iii," ",radius)
 
-        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
-               colorFactor=1,colorOffset=70,colorRepetitions=1,
-               discrete=false,
-               turnIt=angle,
-               additionalParameter=0.0,additionalParameter2=0.0)
+        if iii > 853
+            mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
+                   colorFactor=1,colorOffset=70,colorRepetitions=1,
+                   discrete=false,
+                   turnIt=angle,
+                   additionalParameter=0.0,additionalParameter2=0.0)
+        end
         
         radius *= radiusFactor
         #angle = angle*angleFactor
