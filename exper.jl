@@ -29,18 +29,18 @@ function setindex((x1,x2,x3,x4)::Tuple{T, T, T, T},
     index==3 && return (x1,x2,v,x4)
     return (x1,x2,x3,v)
 end
-function zero(a::Tuple{T, T, T, T}
+function zero((x1,x2,x3,x4)::Tuple{T, T, T, T}
               )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (0.0,0.0,0.0,0.0)
+    return (zero(x1),zero(x2),zero(x3),zero(x4))
 end
 function iszero((x1,x2,x3,x4)::Tuple{T, T, T, T}
               )::Bool where {T<:AbstractFloat}
-    return x1==0.0 && x2==0.0 && x3==0.0 && x4==0.0
+    return iszero(x1) && iszero(x2) && iszero(x3) && iszero(x4)
 end
 
 function one((x1,x2,x3,x4)::Tuple{T, T, T, T}
              )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (1.0,0.0,0.0,0.0)
+    return (one(x1),zero(x2),zero(x3),zero(x4))
 end
 
 function +((x1,x2,x3,x4)::Tuple{T, T, T, T},
