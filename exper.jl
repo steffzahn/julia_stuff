@@ -295,7 +295,7 @@ end
 
 function myimage((x,y,z,u)::Tuple{T, T, T, T},
                  radius::T,limit::T,size::Int64;
-                 turnIt::Tuple{T, T, T, T}=(1.0,0.0,0.0,0.0),
+                 turnIt::Tuple{T, T, T, T}=one((x,y,z,u)),
                  colorScheme::Int64=0,
                  colorFactor::Int64=1,
                  colorOffset::Int64=0,
@@ -353,17 +353,17 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
 end
 
 function mydraw(fn::String,
-                a::Tuple{T, T, T, T},
+                (x,y,z,u)::Tuple{T, T, T, T},
                 radius::T,limit::T,size::Int64;
-                turnIt::Tuple{T, T, T, T}=(1.0,0.0,0.0,0.0),
+                turnIt::Tuple{T, T, T, T}=one(a),
                 colorScheme::Int64=0,
                 colorFactor::Int64=1,
                 colorOffset::Int64=0,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
-                additionalParameter::T=0.0,
-                additionalParameter2::T=0.0) where {T<:AbstractFloat}
-    local image=myimage(a,radius,limit,size,
+                additionalParameter::T=zero(x),
+                additionalParameter2::T=zero(x)) where {T<:AbstractFloat}
+    local image=myimage((x,y,z,u),radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
@@ -381,7 +381,7 @@ function myvideosequence()
     local radius=0.003
     local center=(-2.50692110,0.00089513,0.0,0.0)
     #local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
-    local angle=(1.0,0.0,0.0,0.0)
+    local angle=one(center)
     #local angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
     #local angleFactor
     local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
@@ -407,13 +407,11 @@ function myvideosequence()
 
         println(iii," ",radius)
 
-        if iii > 853
-            mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
-                   colorFactor=1,colorOffset=70,colorRepetitions=1,
-                   discrete=false,
-                   turnIt=angle,
-                   additionalParameter=0.0,additionalParameter2=0.0)
-        end
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
+               colorFactor=1,colorOffset=70,colorRepetitions=1,
+               discrete=false,
+               turnIt=angle,
+               additionalParameter=0.0,additionalParameter2=0.0)
         
         radius *= radiusFactor
         #angle = angle*angleFactor
