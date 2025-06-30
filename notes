@@ -1,3 +1,7 @@
+Blue bubbles
+
+ mydraw("xx.png",(-4.838,0.0913,0.0,0.0), 0.0018, 1000.0, 3840,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=-0.6,additionalParameter2=0.0)
+
 Spiral (2560 x 1440)
 
  mydraw("xx.png",(-2.5078,0.0,0.0,0.0), 0.0025*(2560/1440), 1000.0, 2560,colorScheme=24,colorFactor=1,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.65,additionalParameter2=0.0)
