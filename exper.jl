@@ -21,167 +21,193 @@ using Images
 #using ColorTypes
 #using Match
 
-function setindex((x1,x2,x3,x4)::Tuple{T, T, T, T},
-                   v::T, index::Int64
-                   )::Tuple{T, T, T, T}  where {T<:AbstractFloat}
-    index==1 && return (v,x2,x3,x4)
-    index==2 && return (x1,v,x3,x4)
-    index==3 && return (x1,x2,v,x4)
-    return (x1,x2,x3,v)
-end
-function zero((x1,x2,x3,x4)::Tuple{T, T, T, T}
-              )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (zero(x1),zero(x2),zero(x3),zero(x4))
-end
-function iszero((x1,x2,x3,x4)::Tuple{T, T, T, T}
-              )::Bool where {T<:AbstractFloat}
-    return iszero(x1) && iszero(x2) && iszero(x3) && iszero(x4)
+struct Quaternion{T<:AbstractFloat}
+    w::T  # real part
+    x::T  # i component  
+    y::T  # j component
+    z::T  # k component
 end
 
-function one((x1,x2,x3,x4)::Tuple{T, T, T, T}
-             )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (one(x1),zero(x2),zero(x3),zero(x4))
+# Addition operation - much cleaner!
+function Base.:zero(q1::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(zero(q1.w), zero(q1.x), zero(q1.y), zero(q1.z))
 end
 
-function +((x1,x2,x3,x4)::Tuple{T, T, T, T},
-           (y1,y2,y3,y4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1+y1,x2+y2,x3+y3,x4+y4)
+# For mixed types
+function Base.:zero(q1::Quaternion)
+    T = promote_type(typeof(q1.w))
+    return Quaternion{T}(zero(q1.w), zero(q1.x), zero(q1.y), zero(q1.z))
 end
 
-function -((x1,x2,x3,x4)::Tuple{T, T, T, T},
-           (y1,y2,y3,y4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1-y1,x2-y2,x3-y3, x4-y4)
-end
-function -((x1,x2,x3,x4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (-x1,-x2,-x3,-x4)
+function Base.:iszero(q1::Quaternion{T})::Bool where {T<:AbstractFloat}
+    return iszero(q1.w) && iszero(q1.x) && iszero(q1.y) && iszero(q1.z)
 end
 
-function *((x1,x2,x3, x4)::Tuple{T, T, T, T}, y::AbstractFloat
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+# Addition operation - much cleaner!
+function Base.:+(q1::Quaternion{T}, q2::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(q1.w + q2.w, q1.x + q2.x, q1.y + q2.y, q1.z + q2.z)
+end
+
+# For mixed types
+function Base.:+(q1::Quaternion, q2::Quaternion)
+    T = promote_type(typeof(q1.w), typeof(q2.w))
+    return Quaternion{T}(q1.w + q2.w, q1.x + q2.x, q1.y + q2.y, q1.z + q2.z)
+end
+
+function Base.:-(q1::Quaternion{T}, q2::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(q1.w - q2.w, q1.x - q2.x, q1.y - q2.y, q1.z - q2.z)
+end
+
+function Base.:-(q1::Quaternion, q2::Quaternion)
+    T = promote_type(typeof(q1.w), typeof(q2.w))
+    return Quaternion{T}(q1.w - q2.w, q1.x - q2.x, q1.y - q2.y, q1.z - q2.z)
+end
+
+# Quaternion scalar multiplication (both orders)
+function Base.:*(q::Quaternion{T}, y::AbstractFloat)::Quaternion{T} where {T<:AbstractFloat}
     local yy = convert(T,y)
-    return (x1*yy,x2*yy,x3*yy,x4*yy)
+    return Quaternion(q.w*yy, q.x*yy, q.y*yy, q.z*yy)
 end
-function *(y::AbstractFloat, (x1,x2,x3,x4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
+function Base.:*(y::AbstractFloat, q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
     local yy = convert(T,y)
-    return (x1*yy,x2*yy,x3*yy,x4*yy)
+    return Quaternion(q.w*yy, q.x*yy, q.y*yy, q.z*yy)
 end
-function *((x1,x2,x3, x4)::Tuple{T, T, T, T}, y::T
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1*y,x2*y,x3*y,x4*y)
+function Base.:*(q::Quaternion{T}, y::T)::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(q.w*y, q.x*y, q.y*y, q.z*y)
 end
-function *(y::T, (x1,x2,x3,x4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1*y,x2*y,x3*y,x4*y)
+function Base.:*(y::T, q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(q.w*y, q.x*y, q.y*y, q.z*y)
 end
 
-# \cdot tab
-function ⋅((x1,x2,x3,x4)::Tuple{T, T, T, T},
-          (y1,y2,y3,y4)::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
-    return x1*y1+x2*y2+x3*y3+x4*y4
+# Hamilton (quaternion) product
+function Base.:*(a::Quaternion{T}, b::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(a.w*b.w - a.x*b.x - a.y*b.y - a.z*b.z,
+                      a.w*b.x + a.x*b.w + a.y*b.z - a.z*b.y,
+                      a.w*b.y - a.x*b.z + a.y*b.w + a.z*b.x,
+                      a.w*b.z + a.x*b.y - a.y*b.x + a.z*b.w)
 end
 
-function norm(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
-    return sqrt(x ⋅ x)
+function Base.:*(a::Quaternion, b::Quaternion)
+    T = promote_type(typeof(a.w), typeof(b.w))
+    aT = Quaternion{T}(convert(T,a.w), convert(T,a.x), convert(T,a.y), convert(T,a.z))
+    bT = Quaternion{T}(convert(T,b.w), convert(T,b.x), convert(T,b.y), convert(T,b.z))
+    return aT * bT
 end
-function abs(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
-    return sqrt(x ⋅ x)
+
+# Quaternion times 4x4 matrix (linear transform)
+function Base.:*(q::Quaternion{T}, m::Matrix{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(q.w*m[1,1]+q.x*m[2,1]+q.y*m[3,1]+q.z*m[4,1],
+                      q.w*m[1,2]+q.x*m[2,2]+q.y*m[3,2]+q.z*m[4,2],
+                      q.w*m[1,3]+q.x*m[2,3]+q.y*m[3,3]+q.z*m[4,3],
+                      q.w*m[1,4]+q.x*m[2,4]+q.y*m[3,4]+q.z*m[4,4])
 end
-function abs2(x::Tuple{T, T, T, T})::T where {T<:AbstractFloat}
-    return x ⋅ x
+
+# Dot product and norms
+function ⋅(a::Quaternion{T}, b::Quaternion{T})::T where {T<:AbstractFloat}
+    return a.w*b.w + a.x*b.x + a.y*b.y + a.z*b.z
 end
-function normalize(a::Tuple{T, T, T, T}
-                   )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    local n=norm(a)
-    if n==0.0
+function norm(q::Quaternion{T})::T where {T<:AbstractFloat}
+    return sqrt(q ⋅ q)
+end
+function abs(q::Quaternion{T})::T where {T<:AbstractFloat}
+    return sqrt(q ⋅ q)
+end
+function abs2(q::Quaternion{T})::T where {T<:AbstractFloat}
+    return q ⋅ q
+end
+function normalize(a::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    local n = norm(a)
+    if n == zero(n)
         return a
     end
-    return (1.0/n)*a
+    return (one(n)/n) * a
 end
 
-function conj((x1,x2,x3,x4)::Tuple{T, T, T, T}
-             )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1,-x2,-x3,-x4)
+function conj(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(q.w, -q.x, -q.y, -q.z)
 end
 
-function inv((x1,x2,x3,x4)::Tuple{T, T, T, T}
-             )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (1.0/(x1*x1+x2*x2+x3*x3+x4*x4))*(x1,-x2,-x3,-x4)
+function Base.inv(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    local denom = q.w*q.w + q.x*q.x + q.y*q.y + q.z*q.z
+    return (one(denom)/denom) * conj(q)
 end
 
-function isnan((x1,x2,x3,x4)::Tuple{T, T, T, T}
-               )::Bool where {T<:AbstractFloat}
-    return isnan(x1) || isnan(x2) || isnan(x3) || isnan(x4) 
+function isnan(q::Quaternion{T})::Bool where {T<:AbstractFloat}
+    return isnan(q.w) || isnan(q.x) || isnan(q.y) || isnan(q.z)
+end
+function isinf(q::Quaternion{T})::Bool where {T<:AbstractFloat}
+    return isinf(q.w) || isinf(q.x) || isinf(q.y) || isinf(q.z)
 end
 
-function isinf((x1,x2,x3,x4)::Tuple{T, T, T, T}
-               )::Bool where {T<:AbstractFloat}
-    return isinf(x1) || isinf(x2) || isinf(x3) || isinf(x4) 
+# Component-wise trig helpers for Quaternion (keeps previous semantics)
+function sin(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(sin(q.w), sin(q.x), sin(q.y), sin(q.z))
+end
+function cos(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(cos(q.w), cos(q.x), cos(q.y), cos(q.z))
+end
+function tan(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(tan(q.w), tan(q.x), tan(q.y), tan(q.z))
+end
+function cot(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(cot(q.w), cot(q.x), cot(q.y), cot(q.z))
 end
 
-function *((x1,x2,x3,x4)::Tuple{T, T, T, T},
-           (y1,y2,y3,y4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1*y1-x2*y2-x3*y3-x4*y4,
-            x1*y2+x2*y1+x3*y4-x4*y3,
-            x1*y3-x2*y4+x3*y1+x4*y2,
-            x1*y4+x2*y3-x3*y2+x4*y1)
+# one and setindex for Quaternion
+function Base.one(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(one(q.w), zero(q.x), zero(q.y), zero(q.z))
 end
 
-function *((x1,x2,x3,x4)::Tuple{T, T, T, T},
-           m::Matrix{T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (x1*m[1,1]+x2*m[2,1]+x3*m[3,1]+x4*m[4,1],
-            x1*m[1,2]+x2*m[2,2]+x3*m[3,2]+x4*m[4,2],
-            x1*m[1,3]+x2*m[2,3]+x3*m[3,3]+x4*m[4,3],
-            x1*m[1,4]+x2*m[2,4]+x3*m[3,4]+x4*m[4,4])
+function setindex(q::Quaternion{T}, v::T, index::Int64)::Quaternion{T} where {T<:AbstractFloat}
+    index==1 && return Quaternion(v,q.x,q.y,q.z)
+    index==2 && return Quaternion(q.w,v,q.y,q.z)
+    index==3 && return Quaternion(q.w,q.x,v,q.z)
+    return Quaternion(q.w,q.x,q.y,v)
 end
 
-function /(a::Tuple{T, T, T, T},
-           b::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return a*inv(b)
+function mySum(q::Quaternion{T})::T where {T<:AbstractFloat}
+    return q.w + q.x + q.y + q.z
+end
+function myAbs(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(abs(q.w), abs(q.x), abs(q.y), abs(q.z))
 end
 
-# wrong multiplication
-function funnyMultiply((x1,x2,x3,x4)::Tuple{T, T, T, T},
-           (y1,y2,y3,y4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-     return (x1*y1-x2*y2-x3*y3-x4*y4,
-             x2*y1+x1*y2+x3*y4+x4*y3,
-             x3*y1+x1*y3+x2*y4+x4*y2,
-             x1*y4+x4*y1+x2*y3+x3*y2)
+function myFunc(q::Quaternion{T})::T where {T<:AbstractFloat}
+    return abs(q.w*q.w - q.x*q.x) + abs(q.y*q.y - q.z*q.z)
 end
 
-function mySum((x1,x2,x3,x4)::Tuple{T, T, T, T}
-           )::T where {T<:AbstractFloat}
-     return x1+x2+x3+x4
+# Unary negation for Quaternion
+function Base.:-(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(-q.w, -q.x, -q.y, -q.z)
 end
-function myAbs((x1,x2,x3,x4)::Tuple{T, T, T, T}
-           )::Tuple{T, T, T, T} where {T<:AbstractFloat}
-     return (abs(x1),abs(x2),abs(x3),abs(x4))
+
+# Quaternion division
+function Base.:/(a::Quaternion{T}, b::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return a * inv(b)
 end
-function myFunc((x1,x2,x3,x4)::Tuple{T, T, T, T}
-           )::T where {T<:AbstractFloat}
-     return abs(x1*x1-x2*x2)+abs(x3*x3-x4*x4)
+
+# For mixed-type quaternions, promote and divide
+function Base.:/(a::Quaternion, b::Quaternion)
+    T = promote_type(typeof(a.w), typeof(b.w))
+    aT = Quaternion{T}(convert(T,a.w), convert(T,a.x), convert(T,a.y), convert(T,a.z))
+    bT = Quaternion{T}(convert(T,b.w), convert(T,b.x), convert(T,b.y), convert(T,b.z))
+    return aT / bT
 end
 
 function wave(x::T, p::T)::T where {T<:AbstractFloat}
     local xx = x / p
-    local a = convert(T,(floor(Int64,xx)))
+    local a = convert(T,floor(Int64,xx))
     local m = a + convert(T,0.5)
     local b = a + convert(T,1.0)
-    if xx<m
-        local t = xx-a
+    if xx < m
+        local t = xx - a
         return t*t
     else
         local t = b - xx
         return t*t
     end
 end
+
 function wave2(x::T, p::T)::T where {T<:AbstractFloat}
     local xx = x / p
     local aint64 = floor(Int64,xx)
@@ -189,38 +215,38 @@ function wave2(x::T, p::T)::T where {T<:AbstractFloat}
     local a = convert(T,aint64)
     local m = a + convert(T,0.5)
     local b = a + convert(T,1.0)
-    if xx<m
-        local t = xx-a
+    if xx < m
+        local t = xx - a
         return odd ? - t*t : t*t
     else
         local t = b - xx
         return odd ? - t*t : t*t
     end
 end
-function wave2((x1,x2,x3,x4)::Tuple{T, T, T, T}, (p1,p2,p3,p4)::Tuple{T, T, T, T}, (o1,o2,o3,o4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (wave2(x1,abs(p1)+abs(o1)),wave2(x2,abs(p2)+abs(o2)),wave2(x3,abs(p3)+abs(o3)),wave2(x4,abs(p4)+abs(o4)))
+
+function wave2(q::Quaternion{T}, p::Quaternion{T}, o::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return Quaternion(wave2(q.w, abs(p.w)+abs(o.w)),
+                      wave2(q.x, abs(p.x)+abs(o.x)),
+                      wave2(q.y, abs(p.y)+abs(o.y)),
+                      wave2(q.z, abs(p.z)+abs(o.z)))
 end
-function wave2(x::Tuple{T, T, T, T}, p::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return wave2(x,p,(0.2,0.2,0.2,0.2))
+function wave2(x::Quaternion{T}, p::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    return wave2(x, p, Quaternion(zero(T),zero(T),zero(T),zero(T)))
 end
-function wave2(x::Tuple{T, T, T, T}, p::T)::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return wave2(x,(p,p,p,p))
-end
-function sin((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (sin(x1),sin(x2),sin(x3),sin(x4))
-end
-function cos((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (cos(x1),cos(x2),cos(x3),cos(x4))
-end
-function tan((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (tan(x1),tan(x2),tan(x3),tan(x4))
-end
-function cot((x1,x2,x3,x4)::Tuple{T, T, T, T})::Tuple{T, T, T, T} where {T<:AbstractFloat}
-    return (cot(x1),cot(x2),cot(x3),cot(x4))
-end
+
+
+# Global palette cache
+const PALETTE_CACHE = Dict{Tuple{Int64,Int64}, Tuple{Vector{RGB},Int64}}()
 
 function initPalette(;colorScheme::Int64=0,
                      colorRepetitions::Int64=1)::Tuple{Vector{RGB},Int64}
+
+    cache_key = (colorScheme, colorRepetitions)
+    
+    if haskey(PALETTE_CACHE, cache_key)
+        return PALETTE_CACHE[cache_key]
+    end
+
     local colorSet=div(colorScheme,6)
     colorScheme -= 6*colorSet
     local colorstepsOneColor=256
@@ -298,12 +324,15 @@ function initPalette(;colorScheme::Int64=0,
             colors[(jj*6+6)*colorstepsOneColor-(ii-1)]=color3
         end
     end
-    return (colors,colorsteps)
+
+    result = (colors, colorsteps)
+    PALETTE_CACHE[cache_key] = result
+    return result
 end
 
-function myimage((x,y,z,u)::Tuple{T, T, T, T},
+function myimage(q::Quaternion{T},
                  radius::T,limit::T,size::Int64;
-                 turnIt::Tuple{T, T, T, T}=one((x,y,z,u)),
+                 turnIt::Union{Quaternion{T},Nothing}=nothing,
                  colorScheme::Int64=0,
                  colorFactor::Int64=1,
                  colorOffset::Int64=0,
@@ -315,10 +344,10 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
     local step = radius*2.0/convert(Float64,size)
     local (colors,colorsteps) = initPalette(colorScheme=colorScheme,colorRepetitions=colorRepetitions)
     local black=RGB(0.0,0.0,0.0)
-    local turnItNorm=normalize(turnIt)
-    local xpos = x-radius
+    local turnItLoc = turnIt === nothing ? one(q) : turnIt
+    local turnItNorm=normalize(turnItLoc)
+    local xpos = q.w - radius
     local colorLimit=div(colorsteps-colorOffset,colorFactor)
-    local o = one(turnIt)
     local lastTime=time()
     for i in 1:size
         local now=time()
@@ -326,10 +355,11 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
             println("ROW=",i)
             lastTime=now
         end
-        local ypos = y-radius
+        local ypos = q.x - radius
         for j in 1:size
             local n=1
-            local c=((xpos,ypos,z,u)-(x,y,z,u))*turnItNorm+(x,y,z,u)
+            local pt = Quaternion(xpos,ypos,q.y,q.z)
+            local c=(pt - q)*turnItNorm + q
             local v1=zero(c)
             local v2=zero(c)
             while true
@@ -361,17 +391,17 @@ function myimage((x,y,z,u)::Tuple{T, T, T, T},
 end
 
 function mydraw(fn::String,
-                (x,y,z,u)::Tuple{T, T, T, T},
+                q::Quaternion{T},
                 radius::T,limit::T,size::Int64;
-                turnIt::Tuple{T, T, T, T}=one(a),
+                turnIt::Union{Quaternion{T},Nothing}=nothing,
                 colorScheme::Int64=0,
                 colorFactor::Int64=1,
                 colorOffset::Int64=0,
                 colorRepetitions::Int64=1,
                 discrete::Bool=false,
-                additionalParameter::T=zero(x),
-                additionalParameter2::T=zero(x)) where {T<:AbstractFloat}
-    local image=myimage((x,y,z,u),radius,limit,size,
+                additionalParameter::T=0.0,
+                additionalParameter2::T=0.0) where {T<:AbstractFloat}
+    local image=myimage(q,radius,limit,size,
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
@@ -387,7 +417,7 @@ function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1500
     local radius=0.003
-    local center=(-2.50692110,0.00089513,0.0,0.0)
+    local center=Quaternion(-2.50692110,0.00089513,0.0,0.0)
     #local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
     local angle=one(center)
     #local angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
@@ -415,10 +445,10 @@ function myvideosequence()
 
         println(iii," ",radius)
 
-        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
+         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
-               turnIt=angle,
+             turnIt=angle,
                additionalParameter=0.0,additionalParameter2=0.0)
         
         radius *= radiusFactor
