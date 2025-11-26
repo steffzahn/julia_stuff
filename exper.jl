@@ -349,6 +349,7 @@ function myimage(q::Quaternion{T},
     local xpos = q.w - radius
     local colorLimit=div(colorsteps-colorOffset,colorFactor)
     local lastTime=time()
+    local o = one(q)
     for i in 1:size
         local now=time()
         if now>lastTime+3.0
@@ -380,8 +381,8 @@ function myimage(q::Quaternion{T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = 0.07 * v1 * v1 + 2.3 * v2 + c
-                v2 = 0.07 * v2 * v2 + additionalParameter * vtemp + c
+                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
+                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
             end
             ypos += step
         end
@@ -413,16 +414,23 @@ function mydraw(fn::String,
     save(fn,image)
 end
 
+function approach(x::Float64)::Float64
+    return (1-exp(-8*x))/(1-exp(-8))
+end
+
 function myvideosequence()
     Random.seed!(8273262)
     local sequenceCount=1500
-    local radius=0.003
-    local center=Quaternion(-2.50692110,0.00089513,0.0,0.0)
+    local sequenceCountPhase1=160
+    local radius=0.08
+    local center=Quaternion(-1.4301369627,-0.00196998,0.0,0.0)
     #local centerDelta=((-3.7893,-6.9215,0.0,0.0)-center)*(1.0/sequenceCount)
-    local angle=one(center)
+    local angleStart=Quaternion(1.0,0.3,-0.7,0.5)
+    local angleTarget=Quaternion(1.0,0.2,0.3,-0.5)
     #local angleFactor=normalize((66.0,rand(Float64)-0.3,0.5*(rand(Float64)-0.7),0.4*(rand(Float64)-0.4)))
     #local angleFactor
-    local radiusFactor=(0.00000001/radius)^(1.0/sequenceCount)
+
+    local radiusFactor=(0.0000000002/radius)^(1.0/(sequenceCount-sequenceCountPhase1))
     #local y1=3.4
     #local yend=13.0
     #local z1=-0.5
@@ -443,16 +451,24 @@ function myvideosequence()
         #local vadd=a+b*additionalParameter
         #local vadd2=a2+b2*additionalParameter
 
+        local angle = angleStart + (angleTarget-angleStart)*approach(iii/sequenceCount)
+
         println(iii," ",radius)
 
-         mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
+        mydraw(fn,center, radius, 1000.0, 1620,colorScheme=24,
                colorFactor=1,colorOffset=70,colorRepetitions=1,
                discrete=false,
              turnIt=angle,
-               additionalParameter=0.0,additionalParameter2=0.0)
+                   additionalParameter=0.0,additionalParameter2=0.0)
+        if iii % 151 == 0
+            print("Sleep 30")
+            sleep(30)
+        end
         
-        radius *= radiusFactor
         #angle = angle*angleFactor
+        if iii > sequenceCountPhase1
+            radius *= radiusFactor
+        end
         #center += centerDelta
     end
 
