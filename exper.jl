@@ -139,18 +139,69 @@ function isinf(q::Quaternion{T})::Bool where {T<:AbstractFloat}
     return isinf(q.w) || isinf(q.x) || isinf(q.y) || isinf(q.z)
 end
 
-# Component-wise trig helpers for Quaternion (keeps previous semantics)
+# Analytic quaternion trigonometric functions
 function sin(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
-    return Quaternion(sin(q.w), sin(q.x), sin(q.y), sin(q.z))
+    a  = q.w
+    vx = q.x
+    vy = q.y
+    vz = q.z
+
+    b2 = vx*vx + vy*vy + vz*vz
+    b  = sqrt(b2)
+
+    if b == zero(T)
+        # Purely real quaternion: reduce to real sine
+        return Quaternion(sin(a), zero(T), zero(T), zero(T))
+    else
+        sa = sin(a)
+        ca = cos(a)
+        sb = sinh(b)
+        cb = cosh(b)
+
+        # Vector coefficient: (cos(a)*sinh(b))/b
+        k  = ca * sb / b
+
+        return Quaternion(sa * cb,
+                          vx * k,
+                          vy * k,
+                          vz * k)
+    end
 end
+
 function cos(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
-    return Quaternion(cos(q.w), cos(q.x), cos(q.y), cos(q.z))
+    a  = q.w
+    vx = q.x
+    vy = q.y
+    vz = q.z
+
+    b2 = vx*vx + vy*vy + vz*vz
+    b  = sqrt(b2)
+
+    if b == zero(T)
+        # Purely real quaternion: reduce to real cosine
+        return Quaternion(cos(a), zero(T), zero(T), zero(T))
+    else
+        sa = sin(a)
+        ca = cos(a)
+        sb = sinh(b)
+        cb = cosh(b)
+
+        # Vector coefficient: -(sin(a)*sinh(b))/b
+        k  = -sa * sb / b
+
+        return Quaternion(ca * cb,
+                          vx * k,
+                          vy * k,
+                          vz * k)
+    end
 end
+
 function tan(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
-    return Quaternion(tan(q.w), tan(q.x), tan(q.y), tan(q.z))
+    return sin(q) / cos(q)
 end
+
 function cot(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
-    return Quaternion(cot(q.w), cot(q.x), cot(q.y), cot(q.z))
+    return cos(q) / sin(q)
 end
 
 # one and setindex for Quaternion
