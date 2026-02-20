@@ -415,7 +415,11 @@ function myimage(q::Quaternion{T},
             local v1=zero(c)
             local v2=zero(c)
             while true
-                local currentNorm=norm(v1+v2)
+                local isInf = isinf(v1) || isinf(v2)
+                local currentNorm=limit
+                if !isInf
+                    currentNorm=norm(v1+v2)
+                end
                 if currentNorm>=limit
                     if discrete
                       image[i,j] = colors[colorOffset+n*colorFactor]
