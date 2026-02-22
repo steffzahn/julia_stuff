@@ -436,8 +436,14 @@ function myimage(q::Quaternion{T},
                 end
                 n += 1
                 vtemp = v1
-                v1 = (abs(mySum(v2))>2.0 ? 0.7 * v1 * v1 : 0.03 * myAbs(v2) * v2 * v2) + c
-                v2 = (myFunc(vtemp)<-1.0 ? vtemp -0.5 * v2 : 3.5 * vtemp * v2) + c
+                # Aggressive recurrence: quad/cubic + trig mixing; external knobs: additionalParameter, additionalParameter2
+                v1 = (0.5 * v1 * v1 + 0.04 * v2 * v2 + 0.06 * v2 * v2 * v2) +
+                     (0.07 * sin(v1) + 0.03 * cos(v2) * v1) +
+                     additionalParameter * (v1 * v1 * v2) +
+                     c
+                v2 = (3.0 * vtemp * v2 + 0.015 * v2 * v2 * v2) +
+                     (0.05 * cos(vtemp) * v2 + additionalParameter2 * sin(v2) * vtemp) +
+                     c
             end
             ypos += step
         end
@@ -457,7 +463,7 @@ function mydraw(fn::String,
                 discrete::Bool=false,
                 additionalParameter::T=0.0,
                 additionalParameter2::T=0.0) where {T<:AbstractFloat}
-    local image=myimage(q,radius,limit,size,
+    local image=myimage(q,radius,limit,size;
                   turnIt=turnIt,
                   colorScheme=colorScheme,
                   colorFactor=colorFactor,
@@ -536,4 +542,37 @@ function myvideosequence()
     #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 30000k -pass 1 -vf scale=720:720 -c:a libopus -b:a 128k output.webm
     #  ffmpeg -i xx_%d.png -c:v libvpx-vp9 -b:v 30000k -pass 2 -vf scale=720:720 -c:a libopus -b:a 128k output.webm
 
+end
+
+# Single-frame preview: run with `julia exper.jl preview [size] [additionalParameter] [additionalParameter2]`
+# Optional args: 1=size (default 1000), 2=additionalParameter (default 0.0), 3=additionalParameter2 (default 0.0).
+if length(ARGS) >= 1 && ARGS[1] == "preview"
+    center = Quaternion(-1.4301369627, -0.00196998, 0.0, 0.0)
+    radius = 6.0
+    angle  = Quaternion(1.0, 0.25, -0.5, 0.4)
+    size   = 1000
+    addParam  = 0.0
+    addParam2  = 0.0
+    if length(ARGS) >= 2
+        parsed = tryparse(Int, ARGS[2])
+        if parsed !== nothing && parsed > 0
+            size = parsed
+        end
+    end
+    if length(ARGS) >= 3
+        p = tryparse(Float64, ARGS[3])
+        if p !== nothing
+            addParam = p
+        end
+    end
+    if length(ARGS) >= 4
+        p = tryparse(Float64, ARGS[4])
+        if p !== nothing
+            addParam2 = p
+        end
+    end
+    mydraw("fractal_preview.png", center, radius, 1000.0, size;
+           colorScheme=24, colorFactor=1, colorOffset=70, colorRepetitions=1,
+           discrete=false, turnIt=angle, additionalParameter=addParam, additionalParameter2=addParam2)
+    println("Wrote fractal_preview.png (size ", size, ", additionalParameter ", addParam, ", additionalParameter2 ", addParam2, ")")
 end
