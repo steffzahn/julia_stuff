@@ -585,6 +585,32 @@ pink7: @time mydraw("xx.png",(-1.3939,0.0294,0.0,0.0), 0.0032, 1000.0, 5200,colo
                 v = v * v + convert(Float64, n%3 -1)*vold + c
                 vold = vtemp
 
+asymmetric shear #6
+@time mydraw("xx.png",(-0.3,0.0,0.0,0.0), 0.5, 1000.0, 6000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.5,additionalParameter2=0.0)
+                 vtemp = v1
+                 local m = T[1.0 0.4 0.0 0.0; 0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.6; 0.2 0.0 0.0 1.0]
+                 local s1 = v1 * m
+                 local s2 = v2 * m
+                 local den1 = s1 + one(c); local inv1 = inv(den1)
+                 if isnan(inv1); inv1 = zero(c); end
+                 local den2 = s2 + one(c); local inv2 = inv(den2)
+                 if isnan(inv2); inv2 = zero(c); end
+                 v1 = 0.3 * sin(s1 * s2) + additionalParameter * (s2 * inv1) + c
+                 v2 = 2.5 * tan(s1) * s2 + additionalParameter2 * (vtemp * inv2) + c
+
+asymmetric shear #7 — conditional
+@time mydraw("xx.png",(-0.3,0.2,0.0,0.0), 0.5, 1000.0, 6000,colorScheme=0,colorFactor=5,colorOffset=70,colorRepetitions=1,turnIt=(1.0,0.0,0.0,0.0),discrete=false,additionalParameter=0.3,additionalParameter2=0.1)
+                 vtemp = v1
+                 local m = T[1.0 0.4 0.0 0.0; 0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.6; 0.2 0.0 0.0 1.0]
+                 local s1 = v1 * m
+                 local s2 = v2 * m
+                 local den1 = s1 + one(c); local inv1 = inv(den1)
+                 if isnan(inv1); inv1 = zero(c); end
+                 local den2 = s2 + one(c); local inv2 = inv(den2)
+                 if isnan(inv2); inv2 = zero(c); end
+                 v1 = (mySum(v2) > 0.0 ? 0.3 * sin(s1 * s2) + s2 * inv1 : 0.7 * tan(s1 * s2) - s2 * inv1) + additionalParameter * v2 + c
+                 v2 = (myFunc(v1) < 1.0 ? 2.5 * cos(vtemp) * s2 : 1.5 * tan(s1) * myAbs(s2)) + additionalParameter2 * (vtemp * inv2) + c
+
 Maelstrom2: @time mydraw("xx.png",(-1.159,0.478,-0.19,0.29), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=5)
 Maelstrom: @time mydraw("xx.png",(-1.159,0.59,0.0,0.0), 0.007, 1000.0, 4100,colorScheme=0,colorFactor=3)
 

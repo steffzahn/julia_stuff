@@ -141,6 +141,9 @@ end
 
 # Analytic quaternion trigonometric functions
 function sin(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    if isinf(q) || isnan(q)
+        return zero(q)
+    end
     a  = q.w
     vx = q.x
     vy = q.y
@@ -169,6 +172,9 @@ function sin(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
 end
 
 function cos(q::Quaternion{T})::Quaternion{T} where {T<:AbstractFloat}
+    if isinf(q) || isnan(q)
+        return zero(q)
+    end
     a  = q.w
     vx = q.x
     vy = q.y
@@ -436,14 +442,22 @@ function myimage(q::Quaternion{T},
                 end
                 n += 1
                 vtemp = v1
-                # Aggressive recurrence: quad/cubic + trig mixing; external knobs: additionalParameter, additionalParameter2
-                v1 = (0.5 * v1 * v1 + 0.04 * v2 * v2 + 0.06 * v2 * v2 * v2) +
-                     (0.07 * sin(v1) + 0.03 * cos(v2) * v1) +
-                     additionalParameter * (v1 * v1 * v2) +
-                     c
-                v2 = (3.0 * vtemp * v2 + 0.015 * v2 * v2 * v2) +
-                     (0.05 * cos(vtemp) * v2 + additionalParameter2 * sin(v2) * vtemp) +
-                     c
+                # Asymmetric shear + quotient; knobs: additionalParameter, additionalParameter2
+                local m = T[1.0 0.4 0.0 0.0; 0.0 1.0 0.0 0.0; 0.0 0.0 1.0 0.6; 0.2 0.0 0.0 1.0]
+                local s1 = v1 * m
+                local s2 = v2 * m
+                local den1 = s1 + one(c)
+                local inv1 = inv(den1)
+                if isnan(inv1)
+                    inv1 = zero(c)
+                end
+                local den2 = s2 + one(c)
+                local inv2 = inv(den2)
+                if isnan(inv2)
+                    inv2 = zero(c)
+                end
+                v1 = (mySum(v2) > 0.0 ? 0.3 * sin(s1 * s2) + s2 * inv1 : 0.7 * tan(s1 * s2) - s2 * inv1) + additionalParameter * v2 + c
+                v2 = (myFunc(v1) < 1.0 ? 2.5 * cos(vtemp) * s2 : 1.5 * tan(s1) * myAbs(s2)) + additionalParameter2 * (vtemp * inv2) + c
             end
             ypos += step
         end
